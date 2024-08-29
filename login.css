@@ -71,7 +71,7 @@ body {
   color: #333;
 }
 
-a {
+#loginBtn {
   display: inline-block;
   background-color: #333;
   color: #fff;
@@ -86,13 +86,13 @@ a {
   border-radius: 5px;
 }
 
-a:hover {
+#loginBtn:hover {
   background-color: #fff;
   color: #333;
   border: 1px solid #333;
 }
 
-a span {
+#loginBtn span {
   position: absolute;
   display: block;
 }
