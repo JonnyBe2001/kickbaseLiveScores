@@ -1,99 +1,71 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
 body {
-  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f1f1f1;
+  height: 100vh;
+  margin: 0;
 }
 
 .container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .login-box {
-  background-color: #fff;
+  background: #fff;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.login-box h2 {
-  margin: 0 0 15px;
-  padding: 0;
-  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 300px;
   text-align: center;
-  text-transform: uppercase;
 }
 
 .user-box {
+  margin-bottom: 15px;
   position: relative;
-  margin-bottom: 30px;
 }
 
 .user-box input {
   width: 100%;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 30px;
-  border: none;
-  border-bottom: 2px solid #333;
-  outline: none;
-  background: transparent;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .user-box label {
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-  pointer-events: none;
-  transition: 0.5s;
+  top: 10px;
+  left: 10px;
+  color: #aaa;
+  transition: 0.3s;
 }
 
 .user-box input:focus ~ label,
-.user-box input:valid ~ label {
-  transform: translateY(-20px);
-  font-size: 14px;
+.user-box input:not(:placeholder-shown) ~ label {
+  top: -10px;
+  left: 0;
   color: #333;
+  font-size: 12px;
 }
 
-#loginBtn {
-  display: inline-block;
-  background-color: #333;
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #5cb85c;
   color: #fff;
-  padding: 10px 20px;
-  font-size: 16px;
-  text-transform: uppercase;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  transition: 0.5s;
-  letter-spacing: 2px;
-  border-radius: 5px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-#loginBtn:hover {
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #333;
+button:hover {
+  background: #4cae4c;
 }
 
-#loginBtn span {
-  position: absolute;
-  display: block;
+#lineUpOutput {
+  margin-top: 20px;
 }
-

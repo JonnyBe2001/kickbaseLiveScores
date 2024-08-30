@@ -1,117 +1,90 @@
+// Endpunkt für das Login
+const loginUrl = 'https://api.kickbase.com/user/login';
+
+// global variables
+let token;
 let leagueId;
-let token = localStorage.getItem('token');
-console.log(token);
 
-const tableUrl = 'https://api.kickbase.com/competition/table?matchDay=1';  // Endpunkt für die Tabelle
+// Daten für Login
+const loginData = {
+    email: '',  // Platzhalter, wird durch die Eingabe ersetzt
+    password: '',  // Platzhalter, wird durch die Eingabe ersetzt
+    ext: false
+};
 
-fetchLeagues();
- 
-// leagueFetch triggered in login
+// Funktion zum Login
+async function login() {
+    // Eingabewerte holen
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    loginData.email = email;
+    loginData.password = password;
+
+    try {
+        const response = await fetch(loginUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Login fehlgeschlagen! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        token = data.token;
+        localStorage.setItem('token', token);
+
+        console.log('Token:', token);
+        fetchLeagues();  // Fetch leagues after login
+
+    } catch (error) {
+        console.error('Fehler beim Login:', error);
+        alert("Falsche Anmeldedaten!");
+    }
+}
+
+// Funktion zum Abrufen der Ligen
 async function fetchLeagues() {
+    if (!token) {
+        console.error('Token ist nicht verfügbar.');
+        return;
+    }
+
     try {
         const response = await fetch('https://api.kickbase.com/leagues/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Setzt das Authentifizierungstoken im Authorization-Header
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
         });
 
         if (!response.ok) {
             throw new Error(`Fehler beim Abrufen der Ligen! Status: ${response.status}`);
-            alert("Fehler");
         }
 
         const data = await response.json();
         leagueId = data.leagues[0]?.id;
-        console.log("League ID:" + leagueId);
+        console.log('League ID:', leagueId);
 
-        await fetchLeagueLineup();
+        // Fetch league lineup after fetching leagues
+        fetchLeagueLineup();
 
     } catch (error) {
         console.error('Fehler beim Abrufen der Ligen:', error);
-        document.getElementById('output').textContent = 'Fehler beim Abrufen der Ligen.';
     }
 }
 
-
-/*
-// Funktion zum Abrufen der Liga-Statistiken
-async function fetchLeagueStats() {
-    if (!leagueId) {
-        console.error('League ID ist nicht verfügbar.');
-        document.getElementById('output').textContent = 'Keine League ID verfügbar.';
-        return;
-    }
-
-    try {
-        const response = await fetch(`https://api.kickbase.com/leagues/${leagueId}/stats`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Setzt das Authentifizierungstoken im Authorization-Header
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Fehler beim Abrufen der Liga-Statistiken! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Extrahiere Benutzer-ID und Namen
-        const users = data.users.reduce((acc, user) => {
-            acc[user.id] = user.name;
-            return acc;
-        }, {});
-
-        // Zeige die Benutzerdaten an
-        const userStats = data.matchDays[0].users.map(userStat => {
-            const userName = users[userStat.userId];
-            return {
-                userId: userStat.userId,
-                username: userName || 'Unbekannt',
-                dayPoints: userStat.dayPoints,
-                dayPlacement: userStat.dayPlacement,
-                teamValue: userStat.teamValue
-            };
-        });
-
-        // Formatierte Ausgabe
-        const outputHtml = userStats.map(stat => `
-            <div>
-                <strong>Benutzername:</strong> ${stat.username} <br>
-                <strong>Benutzer-ID:</strong> ${stat.userId} <br>
-                <strong>Tagesspunkte:</strong> ${stat.dayPoints} <br>
-                <strong>Tageseinstufung:</strong> ${stat.dayPlacement} <br>
-                <strong>Teamwert:</strong> ${stat.teamValue} <br>
-                <button>Live</button>
-                <hr>
-            </div>
-        `).join('');
-
-        document.getElementById('output').innerHTML = outputHtml;
-
-    } catch (error) {
-        console.error('Fehler beim Abrufen der Liga-Statistiken:', error);
-        document.getElementById('output').textContent = 'Fehler beim Abrufen der Liga-Statistiken.';
-    }
-}
-
-// Event-Listener für den Button
-document.getElementById('leagueStats').addEventListener('click', () => {
-    fetchLeagueStats();
-});
-
-*/
-
-
-// Funktion zum Abrufen der Liga-Aufstellungen und Ausgabe der Spielernamen
+// Funktion zum Abrufen der Liga-Aufstellung und Ausgabe der Spielernamen
 async function fetchLeagueLineup() {
     if (!leagueId) {
-        document.getElementById('lineUpOutput').textContent = 'Liga-ID ist nicht verfügbar.';
+        console.error('League ID ist nicht verfügbar.');
         return;
     }
 
@@ -121,7 +94,7 @@ async function fetchLeagueLineup() {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Setzt das Authentifizierungstoken im Authorization-Header
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
         });
 
@@ -130,66 +103,39 @@ async function fetchLeagueLineup() {
         }
 
         const data = await response.json();
-
-        // Ausgabe der gesamten Antwort in der Konsole
-        console.log('Liga-Aufstellungen:', data);
-
-        // Die 11 Spieler IDs, die im Lineup enthalten sind
         const lineupPlayerIds = data.lineup;
-        
-        // Die Liste aller Spieler
         const allPlayers = data.players;
 
-        // Speichern der Spielerdetails in einem Array
         const lineupPlayersDetails = lineupPlayerIds.map(playerId => {
             return allPlayers.find(p => p.id === playerId);
         });
 
-        // Die IDs der Spieler ausgeben
-        console.log('Spieler-IDs im Lineup:', lineupPlayersDetails.map(player => player.id));
-
-        let lineUpArray = [];
-
-        // Positionen als Mapping-Objekt
-        const positionMap = {
-            1: 'GK',
-            2: 'DEF',
-            3: 'MID',
-            4: 'ST'
-        };
-
-        // Zum Beispiel kannst du für jeden Spieler die Punkte abrufen:
-        const pointsPromises = lineupPlayersDetails.map(async (player) => {
+        // Spieler-Punkte abrufen und anzeigen
+        const lineupDetails = await Promise.all(lineupPlayersDetails.map(async player => {
             const points = await fetchPlayerPoints(player.id);
-            console.log(`Punkte für ${player.lastName} (ID: ${player.id}): ${points}`);
-            
-            // Bestimme die Position basierend auf der player.position-Nummer
-            const position = positionMap[player.position];
+            return {
+                lastName: player.lastName,
+                points: points,
+                position: getPositionLabel(player.position) // Funktion zum Ermitteln der Position
+            };
+        }));
 
-            // Formatierte Ausgabe mit Name, Position und Punkten
-            return `${player.lastName} (${position}) - ${points} Punkte`;
-        });
-
-        // Warten, bis alle Punkte abgerufen wurden
-        Promise.all(pointsPromises).then(results => {
-            // Array in HTML umwandeln
-            const lineUpHtml = results.map(item => `<li>${item}</li>`).join('');
-            
-            // HTML in das Element einfügen
-            document.getElementById('lineUpOutput').innerHTML = `<ul>${lineUpHtml}</ul>`;
-        });
-
+        // Formatierte Ausgabe
+        const outputHtml = lineupDetails.map((player, index) => `
+            <div>
+                ${index + 1}: ${player.lastName} (${player.position} - ${player.points})
+            </div>
+        `).join('');
+        
+        document.getElementById('lineUpOutput').innerHTML = outputHtml;
 
     } catch (error) {
         console.error('Fehler beim Abrufen der Liga-Aufstellungen:', error);
-        document.getElementById('lineUpOutput').textContent = 'Fehler beim Abrufen der Liga-Aufstellungen.';
     }
 }
 
-
-
 // Funktion zum Abrufen der Punkte eines Spielers
-async function fetchPlayerPoints(playerId, playerName) {
+async function fetchPlayerPoints(playerId) {
     const url = `https://api.kickbase.com/players/${playerId}/points`;
 
     try {
@@ -198,7 +144,7 @@ async function fetchPlayerPoints(playerId, playerName) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
         });
 
@@ -207,23 +153,36 @@ async function fetchPlayerPoints(playerId, playerName) {
         }
 
         const data = await response.json();
-
-        // Daten aus der Antwort extrahieren
         const sArray = data.s;
+
         if (sArray && sArray.length > 0) {
-            // Finde das letzte Element im Array und den Wert von 'p'
             const lastElement = sArray[sArray.length - 1];
             const lastPValue = lastElement.p;
-
-            // Ausgabe des Wertes
-            console.log('letzter/aktueller Spieltag:', lastPValue);
             return lastPValue;
         } else {
-            console.log('Das Array ist leer oder nicht vorhanden.');
-            return 0;  // Standardwert bei fehlenden Daten
+            return 0; // Standardwert bei fehlenden Daten
         }
     } catch (error) {
         console.error('Fehler bei der API-Anfrage:', error);
-        return null;  // Rückgabe von null im Fehlerfall
+        return null; // Rückgabe von null im Fehlerfall
     }
 }
+
+// Funktion zum Ermitteln der Position
+function getPositionLabel(position) {
+    switch (position) {
+        case 1:
+            return 'GK'; // Torwart
+        case 2:
+            return 'DEF'; // Abwehr
+        case 3:
+            return 'MID'; // Mittelfeld
+        case 4:
+            return 'ST'; // Stürmer
+        default:
+            return 'UNBEKANNT'; // Unbekannt
+    }
+}
+
+// Event-Listener für den Login-Button
+document.getElementById('loginBtn').addEventListener('click', login);
