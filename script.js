@@ -135,10 +135,13 @@ function createDropdown(teamName, players) {
     // Spieler nach Position sortieren
     players.sort((a, b) => a.p - b.p);
     
-    // Team Header
+    // Gesamtpunkte des Teams berechnen
+    const totalPoints = players.reduce((acc, player) => acc + player.t, 0);
+    
+    // Team Header mit Gesamtpunkten
     const teamHeader = document.createElement('div');
     teamHeader.className = 'team-header';
-    teamHeader.textContent = teamName;
+    teamHeader.textContent = `${teamName} (${totalPoints})`;
     teamHeader.addEventListener('click', toggleDropdown);
 
     // Dropdown Content
