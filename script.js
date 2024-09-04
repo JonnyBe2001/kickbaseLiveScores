@@ -1,5 +1,3 @@
-
-
 // Globale Variable für das aktuell geöffnete Team
 let currentOpenDropdown = null;
 
@@ -133,6 +131,9 @@ async function fetchLeagueLineup() {
 // Funktion zum Erstellen von Dropdowns
 function createDropdown(teamName, players) {
     const container = document.getElementById('lineUpOutput');
+    
+    // Spieler nach Position sortieren
+    players.sort((a, b) => a.p - b.p);
     
     // Team Header
     const teamHeader = document.createElement('div');
