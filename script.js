@@ -33,6 +33,7 @@ async function login() {
     try {
         const response = await fetch('https://api.kickbase.com/user/login', {
             method: 'POST',
+            mode: 'cors', // CORS hinzufügen
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -69,6 +70,7 @@ async function fetchLeagues() {
     try {
         const response = await fetch('https://api.kickbase.com/leagues/', {
             method: 'GET',
+            mode: 'cors', // CORS hinzufügen
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -103,6 +105,7 @@ async function fetchLeagueLineup() {
         const url = `https://api.kickbase.com/leagues/${leagueId}/live`;
         const response = await fetch(url, {
             method: 'GET',
+            mode: 'cors', // CORS hinzufügen
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
