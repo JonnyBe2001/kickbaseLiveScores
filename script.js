@@ -50,7 +50,7 @@ async function login() {
         localStorage.setItem('token', loginToken);  // Token im localStorage speichern
 
         token = loginToken;
-        document.getElementById('loginForm').classList.add('hidden'); // Verstecke das Login-Formular
+        hideLoginForm();
         fetchLeagues();  // Fetch leagues after login
 
     } catch (error) {
@@ -61,8 +61,6 @@ async function login() {
 
 // Funktion zum Abrufen der Ligen
 async function fetchLeagues() {
-    document.getElementById('loginForm').classList.add('hidden'); // Verstecke das Login-Formular
-
     if (!token) {
         console.error('Token ist nicht verfügbar.');
         showLoginForm();  // Falls kein Token verfügbar, zeige das Login-Formular
@@ -192,7 +190,12 @@ function getPositionLabel(position) {
 
 // Funktion zum Anzeigen des Login-Formulars
 function showLoginForm() {
-    document.getElementById('loginForm').classList.remove('hidden');  // Zeige das Login-Formular
+    document.getElementById('loginForm').style.display = '';  // Entfernt den Inline-Stil
+}
+
+function hideLoginForm() {
+    document.getElementById('loginForm').classList.add('hidden');  // Zeige das Login-Formular
+
 }
 
 // Funktion zum Überprüfen des Tokens beim Laden der Seite
