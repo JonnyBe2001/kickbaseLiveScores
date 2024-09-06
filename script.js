@@ -61,6 +61,8 @@ async function login() {
 
 // Funktion zum Abrufen der Ligen
 async function fetchLeagues() {
+    document.getElementById('loginForm').classList.add('hidden'); // Verstecke das Login-Formular
+
     if (!token) {
         console.error('Token ist nicht verfügbar.');
         showLoginForm();  // Falls kein Token verfügbar, zeige das Login-Formular
