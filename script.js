@@ -2,6 +2,7 @@
 let currentOpenDropdown = null;
 let token = localStorage.getItem('token');  // Token aus dem localStorage laden
 let leagueId = null;
+let playerId ="1473";
 
 // Funktion zum Öffnen und Schließen von Dropdowns
 function toggleDropdown(event) {
@@ -125,7 +126,7 @@ async function fetchLeagueLineup() {
 
         // Erstellen der Dropdowns für jedes Team
         teams.forEach(team => {
-            createDropdown(team.n, team.pl);
+            createDropdown(team.n, team.pl, team.id);
         });
 
     } catch (error) {
@@ -136,7 +137,6 @@ async function fetchLeagueLineup() {
 // Funktion zum Erstellen von Dropdowns
 function createDropdown(teamName, players) {
     const container = document.getElementById('lineUpOutput');
-
     // Spieler nach Position sortieren
     players.sort((a, b) => a.p - b.p);
 
@@ -162,6 +162,10 @@ function createDropdown(teamName, players) {
     players.forEach(player => {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${player.n}</td><td>${getPositionLabel(player.p)}</td><td>${player.t}</td>`;
+
+        // Hinzufügen des onClick-Event-Listeners zur Zeile
+        row.addEventListener('click', () => showPlayerHistory(player.id, player.n, player.t)); // Spieler ID direkt übergeben
+
         tableBody.appendChild(row);
     });
     table.appendChild(tableBody);
@@ -185,6 +189,87 @@ function getPositionLabel(position) {
             return 'ST';  // Stürmer
         default:
             return 'Unbekannt'; // Unbekannt
+    }
+}
+
+async function showPlayerHistory(playerId, playerName, playerPkt) {
+    console.log(`Zeige Historie für Spieler mit ID: ${playerId}`);
+
+    // Den Inhalt des Elements mit ID 'mainContent' verstecken
+    const mainContent = document.getElementById('mainContent');
+    if (mainContent) {
+        mainContent.style.display = 'none';
+    }
+
+    // Spieler-ID im Element 'playerIdDisplay' anzeigen
+    const playerIdDisplay = document.getElementById('playerIdDisplay');
+    if (playerIdDisplay) {
+        // Inhalt zurücksetzen
+        playerIdDisplay.innerHTML = `<h2>${playerName} (${playerPkt})</h2>`;
+
+        // Erstelle und füge den Reload-Button hinzu
+        const reloadButton = document.createElement('button');
+        reloadButton.textContent = 'Zurück';
+        reloadButton.addEventListener('click', () => location.reload()); // Seite neu laden beim Klicken
+        playerIdDisplay.appendChild(reloadButton);
+
+        if (!leagueId) {
+            console.error('League ID ist nicht verfügbar.');
+            return;
+        }
+
+        const url = `https://api.kickbase.com/leagues/${leagueId}/live/players/${playerId}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fehler beim Abrufen des Player Feeds! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Tabelle erstellen
+            const table = document.createElement('table');
+            const tableHeader = document.createElement('thead');
+            tableHeader.innerHTML = `<tr><th>Spielminute</th><th>Punkte</th></tr>`;
+            table.appendChild(tableHeader);
+
+            const tableBody = document.createElement('tbody');
+            // Sortieren nach Spielminute (absteigend)
+            const sortedEvents = data.e.sort((a, b) => b.ts - a.ts);
+            sortedEvents.forEach(event => {
+                const row = document.createElement('tr');
+                const pointsCell = document.createElement('td');
+                
+                // Punkte formatieren
+                const pointsText = event.p > 0 ? `+${event.p}` : event.p;
+                pointsCell.textContent = pointsText;
+                
+                // Styling der Punkte-Zelle basierend auf dem Wert
+                if (event.p > 0) {
+                    pointsCell.style.color = 'green';  // Positive Punkte in Grün
+                } else if (event.p < 0) {
+                    pointsCell.style.color = 'red';  // Negative Punkte in Rot
+                }
+                row.innerHTML = `<td>${event.ts}</td>`;
+                row.appendChild(pointsCell);
+                tableBody.appendChild(row);
+            });
+            table.appendChild(tableBody);
+
+            playerIdDisplay.appendChild(table);  // Tabelle zum playerIdDisplay hinzufügen
+
+        } catch (error) {
+            console.error('Fehler:', error);
+        }
     }
 }
 
