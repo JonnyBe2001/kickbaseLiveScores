@@ -2,6 +2,7 @@
 let currentOpenDropdown = null;
 let token = localStorage.getItem('token');  // Token aus dem localStorage laden
 let leagueId = null;
+let playerId ="1473";
 
 // Funktion zum Öffnen und Schließen von Dropdowns
 function toggleDropdown(event) {
@@ -96,6 +97,7 @@ async function fetchLeagues() {
 
 // Funktion zum Abrufen der Liga-Aufstellung und Ausgabe der Spielernamen und Live-Punkte
 async function fetchLeagueLineup() {
+    fetchPlayerFeed();
     if (!leagueId) {
         console.error('League ID ist nicht verfügbar.');
         return;
@@ -119,6 +121,8 @@ async function fetchLeagueLineup() {
 
         const data = await response.json();
         const teams = data.u;
+
+        console.log(teams);
 
         // Leeren des bisherigen Inhalts
         document.getElementById('lineUpOutput').innerHTML = '';
@@ -208,3 +212,32 @@ window.onload = function() {
         showLoginForm();
     }
 };
+
+
+
+
+async function fetchPlayerFeed() {
+    const url = `https://api.kickbase.com/leagues/${leagueId}/live/players/${playerId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            credentials: 'include'  // Include cookies if needed
+        });
+
+        if (!response.ok) {
+            throw new Error(`Fehler beim Abrufen des Player Feeds! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(playerId);
+        console.log(data);  // Ausgabe des Ergebnisses in der Konsole
+    } catch (error) {
+        console.error('Fehler:', error);
+    }
+}
