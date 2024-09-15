@@ -128,15 +128,16 @@ button:hover {
   border-collapse: collapse;
 }
 
-.dropdown-content th,
-.dropdown-content td {
+th,
+td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: center;
 }
 
-.dropdown-content th {
+th {
   background-color: #f4f4f4;
+  color:#131314;
 }
 
 .team-header {
@@ -157,4 +158,8 @@ button:hover {
 
 #loginForm.hidden {
   display: none;
+}
+
+#playerIdDisplay {
+  color: white;
 }
