@@ -52,48 +52,15 @@ async function login() {
         let loginToken = data.tkn;
         localStorage.setItem('token', loginToken);  // Token im localStorage speichern
 
+        leagueId = data.srvl[0]?.id; //get first league
+
         token = loginToken;
         hideLoginForm();
-        fetchLeagues();  // Fetch leagues after login
+        fetchLeagueLineup();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
         alert("Falsche Anmeldedaten!");
-    }
-}
-
-// Funktion zum Abrufen der Ligen
-async function fetchLeagues() {
-    if (!token) {
-        console.error('Token ist nicht verfügbar.');
-        showLoginForm();  // Falls kein Token verfügbar, zeige das Login-Formular
-        return;
-    }
-
-    try {
-        const response = await fetch('https://api.kickbase.com/v4/leagues/', {
-            method: 'GET',
-            mode: 'cors', // CORS hinzufügen
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`  // Authentifizierung mit Bearer-Token
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Fehler beim Abrufen der Ligen! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        leagueId = data.leagues[0]?.id;
-
-        // Fetch league lineup after fetching leagues
-        fetchLeagueLineup();
-
-    } catch (error) {
-        console.error('Fehler beim Abrufen der Ligen:', error);
-        showLoginForm();  // Falls ein Fehler auftritt, Login-Formular anzeigen, um einen neuen Token zu holen
     }
 }
 
