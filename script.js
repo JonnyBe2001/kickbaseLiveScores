@@ -50,19 +50,119 @@ async function login() {
 
         const data = await response.json();
         let loginToken = data.tkn;
-        localStorage.setItem('token', loginToken);  // Token im localStorage speichern
+        //localStorage.setItem('token', loginToken); Token im localStorage speichern
 
         leagueId = data.srvl[0]?.id; //get first league
 
         token = loginToken;
         hideLoginForm();
-        fetchLeagueLineup();
+        temporaryQuickFix();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
         alert("Falsche Anmeldedaten!");
     }
 }
+
+
+
+async function temporaryQuickFix(){
+
+    try {
+        const url = `https://api.kickbase.com/v4/leagues/${leagueId}/squad`;
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors', // CORS hinzufügen
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`  // Authentifizierung mit Bearer-Token
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`Fehler beim Abrufen der Liga-Livepunkte! Status: ${response.status}`);
+        }
+        //parse json
+        const data = await response.json();
+
+        // Alle "i"-Werte extrahieren
+        const iValues = data.it.map(player => player.i);
+        console.log(iValues);
+        fetchPlayerData(iValues);
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Liga-Livepunkte:', error);
+    }
+
+    
+}
+
+async function fetchPlayerData(playerIds) {
+    try {
+        // Tabelle initialisieren
+        const results = [];
+
+        // Alle API-Anfragen iterieren
+        for (const playerId of playerIds) {
+            const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}?leagueId=${leagueId}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                console.warn(`Fehler beim Abrufen der Daten für Spieler-ID ${playerId}: ${response.status}`);
+                continue; // Überspringe fehlerhafte IDs
+            }
+
+            const data = await response.json();
+
+            // Spielername und erster `p`-Wert aus `ph` extrahieren
+            const playerName = data.ln; // Nachname des Spielers
+            const firstPValue = data.ph?.[0]?.p ?? 0; // Erster `p`-Wert oder 0, falls nicht vorhanden
+
+            // Speichere die Daten für die Tabelle
+            results.push({ playerName, firstPValue });
+        }
+
+        // Tabelle erstellen
+        displayResultsInTable(results);
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Spielerinformationen:', error);
+    }
+}
+
+
+// Funktion zum Erstellen und Anzeigen der Tabelle im HTML
+function displayResultsInTable(results) {
+    // Element für die Ausgabe (z.B. lineUpOutput) finden
+    const tableContainer = document.getElementById('lineUpOutput');
+    if (!tableContainer) {
+        console.error('Container für die Tabelle nicht gefunden!');
+        return;
+    }
+
+    // Tabelle erstellen
+    const table = document.createElement('table');
+    const tableHeader = document.createElement('thead');
+    tableHeader.innerHTML = `<tr><th>Spieler</th><th>Punkte</th></tr>`;
+    table.appendChild(tableHeader);
+
+    const tableBody = document.createElement('tbody');
+    results.forEach(result => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${result.playerName}</td><td>${result.firstPValue}</td>`;
+        tableBody.appendChild(row);
+    });
+
+    table.appendChild(tableBody);
+    tableContainer.appendChild(table); // Tabelle ins HTML einfügen
+}
+
+
 
 // Funktion zum Abrufen der Liga-Aufstellung und Ausgabe der Spielernamen und Live-Punkte
 async function fetchLeagueLineup() {
@@ -72,7 +172,7 @@ async function fetchLeagueLineup() {
     }
 
     try {
-        const url = `https://api.kickbase.com/leagues/${leagueId}/live`;
+        const url = `https://api.kickbase.com/v4/leagues/${leagueId}/squad`;
         const response = await fetch(url, {
             method: 'GET',
             mode: 'cors', // CORS hinzufügen
@@ -81,6 +181,12 @@ async function fetchLeagueLineup() {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`  // Authentifizierung mit Bearer-Token
             }
+
+
+
+
+
+        
         });
 
         if (!response.ok) {
@@ -256,7 +362,7 @@ function hideLoginForm() {
 window.onload = function() {
     if (token) {
         // Versuche, die Ligen mit dem gespeicherten Token abzurufen
-        fetchLeagues();
+        temporaryQuickFix();
     } else {
         // Zeige das Login-Formular, falls kein Token vorhanden ist
         showLoginForm();

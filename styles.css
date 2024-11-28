@@ -140,6 +140,10 @@ th {
   color:#131314;
 }
 
+tbody {
+  color: white;
+}
+
 .team-header {
   cursor: pointer;
   background-color: #fb4404;
