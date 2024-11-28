@@ -26,13 +26,15 @@ async function login() {
     const password = document.getElementById('password').value;
 
     const loginData = {
-        email: email,
-        password: password,
-        ext: false
+        em: email,
+        ext: false,
+        loy: false,
+        pass: password,
+        rep:{},
     };
 
     try {
-        const response = await fetch('https://api.kickbase.com/user/login', {
+        const response = await fetch('https://api.kickbase.com/v4/user/login', {
             method: 'POST',
             mode: 'cors', // CORS hinzufügen
             headers: {
@@ -47,7 +49,7 @@ async function login() {
         }
 
         const data = await response.json();
-        let loginToken = data.token;
+        let loginToken = data.tkn;
         localStorage.setItem('token', loginToken);  // Token im localStorage speichern
 
         token = loginToken;
@@ -69,7 +71,7 @@ async function fetchLeagues() {
     }
 
     try {
-        const response = await fetch('https://api.kickbase.com/leagues/', {
+        const response = await fetch('https://api.kickbase.com/v4/leagues/', {
             method: 'GET',
             mode: 'cors', // CORS hinzufügen
             headers: {
