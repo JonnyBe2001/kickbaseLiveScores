@@ -2,6 +2,7 @@
 let currentOpenDropdown = null;
 let token = localStorage.getItem('token');  // Token aus dem localStorage laden
 let leagueId = null;
+let userId = null;
 let playerId ="1473";
 
 
@@ -40,10 +41,11 @@ async function login() {
         //localStorage.setItem('token', loginToken); Token im localStorage speichern
 
         leagueId = data.srvl[0]?.id; //get first league
+        userId = data.u.id;
 
         token = loginToken;
         hideLoginForm();
-        loginSuccess();
+        fetchTeamcenter();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
@@ -52,20 +54,42 @@ async function login() {
 }
 
 
-async function loginSuccess() {
+async function fetchTeamcenter() {
     console.log("success");
-    const response = await fetch('https://api.kickbase.com/v4/leagues/5679965/users/3283344/teamcenter', {
-        method: 'POST',
-        mode: 'cors', // CORS hinzufügen
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(loginData)
+    const url = `https://api.kickbase.com/v4/leagues/${leagueId}/users/${userId}/teamcenter`;
+        const response = await fetch(url, {
+    
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
+            }
     });
+    const tcdata = await response.json(); // Teamcenter Data
+    // Erstelle die Tabelle und fülle sie mit den Daten
+const outputDiv = document.getElementById("lineUpOutput");
+const table = document.createElement("table");
+const tbody = document.createElement("tbody");
+
+// Füge die Header-Zeile hinzu
+const headerRow = document.createElement("tr");
+headerRow.innerHTML = "<th>Spieler Name</th><th>Punkte</th>";
+tbody.appendChild(headerRow);
+
+// Gehe durch alle lp-Elemente und erstelle eine Zeile
+tcdata.lp.forEach((item) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `<td>${item.n}</td><td>${item.p || 'N/A'}</td>`;
+  tbody.appendChild(row);
+});
+
+// Füge den Tabellenkörper zur Tabelle hinzu
+table.appendChild(tbody);
+
+// Füge die Tabelle zum div-Element hinzu
+outputDiv.appendChild(table);
 }
-
-
 
 
 
@@ -81,11 +105,6 @@ function hideLoginForm() {
 
 // Funktion zum Überprüfen des Tokens beim Laden der Seite
 window.onload = function() {
-    if (token) {
-        // Versuche, die Ligen mit dem gespeicherten Token abzurufen
-        temporaryQuickFix();
-    } else {
         // Zeige das Login-Formular, falls kein Token vorhanden ist
         showLoginForm();
-    }
-};
+}

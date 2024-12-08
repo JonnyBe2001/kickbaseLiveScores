@@ -85,49 +85,6 @@ button:hover {
   width: 100%;
 }
 
-/* Dropdowns */
-.dropdown {
-  margin: 10px 0;
-  position: relative;
-  width: 100%;
-}
-
-.dropdown-button {
-  cursor: pointer;
-  padding: 10px;
-  background-color: #fb4404;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box; /* Ensure padding is included in the width */
-}
-
-.dropdown-button:hover {
-  background-color: #9a300d;
-}
-
-.dropdown-content {
-  display: none;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  position: relative;
-  width: 100%;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 2;
-}
-
-.dropdown-content.show {
-  display: block;
-}
-
-.dropdown-content table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
 th,
 td {
   padding: 10px;
@@ -144,26 +101,8 @@ tbody {
   color: white;
 }
 
-.team-header {
-  cursor: pointer;
-  background-color: #fb4404;
-  color: white;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.team-header:hover {
-  background-color: #9a300d;
-}
-
 #loginForm.hidden {
   display: none;
 }
 
-#playerIdDisplay {
-  color: white;
-}
+
