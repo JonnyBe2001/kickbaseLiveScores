@@ -45,7 +45,9 @@ async function login() {
 
         token = loginToken;
         hideLoginForm();
-        fetchTeamcenter();
+        players();
+        myeleven();
+        performance();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
@@ -54,9 +56,8 @@ async function login() {
 }
 
 
-async function fetchTeamcenter() {
-    console.log("success");
-    const url = `https://api.kickbase.com/v4/leagues/${leagueId}/users/${userId}/teamcenter`;
+async function players() {
+    const url = `https://api.kickbase.com/v4/competitions/1/players/8229?leagueId=5679965`;
         const response = await fetch(url, {
     
             method: 'GET',
@@ -66,29 +67,45 @@ async function fetchTeamcenter() {
                 'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
     });
-    const tcdata = await response.json(); // Teamcenter Data
-    // Erstelle die Tabelle und fülle sie mit den Daten
-const outputDiv = document.getElementById("lineUpOutput");
-const table = document.createElement("table");
-const tbody = document.createElement("tbody");
+    const playerData = await response.json(); // Teamcenter Data
+    const playerPoints = playerData.ph[0]?.p;
 
-// Füge die Header-Zeile hinzu
-const headerRow = document.createElement("tr");
-headerRow.innerHTML = "<th>Spieler Name</th><th>Punkte</th>";
-tbody.appendChild(headerRow);
+    document.getElementById("players").innerHTML=`<strong>/players </strong> Grabara: ${playerPoints}`
+}
 
-// Gehe durch alle lp-Elemente und erstelle eine Zeile
-tcdata.lp.forEach((item) => {
-  const row = document.createElement("tr");
-  row.innerHTML = `<td>${item.n}</td><td>${item.p || 'N/A'}</td>`;
-  tbody.appendChild(row);
-});
+async function myeleven() {
+    const url = `https://api.kickbase.com/v4/leagues/5679965/teamcenter/myeleven`;
+        const response = await fetch(url, {
+    
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
+            }
+    });
+    const myelevenData = await response.json(); // Teamcenter Data
+    const myelevenPoints = myelevenData.lp[0].p;
 
-// Füge den Tabellenkörper zur Tabelle hinzu
-table.appendChild(tbody);
+    document.getElementById("myeleven").innerHTML=`<br><strong>/myeleven </strong> Grabara: ${myelevenPoints}`
+}
 
-// Füge die Tabelle zum div-Element hinzu
-outputDiv.appendChild(table);
+async function performance() {
+    const url = `https://api.kickbase.com/v4/competitions/1/players/8229/performance?leagueId=5679965`;
+        const response = await fetch(url, {
+    
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
+            }
+    });
+    const performanceData = await response.json(); // Teamcenter Data
+    const performanceElement = performanceData.it[0].ph.find(element => element.cur);
+    const performancePoints = performanceElement.p;
+
+    document.getElementById("performance").innerHTML=`<br><strong>/performance </strong> Grabara: ${performancePoints}`
 }
 
 
