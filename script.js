@@ -3,7 +3,7 @@ let currentOpenDropdown = null;
 let token = localStorage.getItem('token');  // Token aus dem localStorage laden
 let leagueId = null;
 let userId = null;
-let playerId ="1473";
+let playerId ="3558";
 
 
 
@@ -57,7 +57,7 @@ async function login() {
 
 
 async function players() {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/8229?leagueId=5679965`;
+    const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}?leagueId=5679965`;
         const response = await fetch(url, {
     
             method: 'GET',
@@ -70,7 +70,7 @@ async function players() {
     const playerData = await response.json(); // Teamcenter Data
     const playerPoints = playerData.ph[0]?.p;
 
-    document.getElementById("players").innerHTML=`<strong>/players </strong> Grabara: ${playerPoints}`
+    document.getElementById("players").innerHTML=`<strong>/players </strong> Ordets: ${playerPoints}`
 }
 
 async function myeleven() {
@@ -85,13 +85,13 @@ async function myeleven() {
             }
     });
     const myelevenData = await response.json(); // Teamcenter Data
-    const myelevenPoints = myelevenData.lp[0].p;
+    const myelevenPoints = myelevenData.lp[4].p;
 
-    document.getElementById("myeleven").innerHTML=`<br><strong>/myeleven </strong> Grabara: ${myelevenPoints}`
+    document.getElementById("myeleven").innerHTML=`<br><strong>/myeleven </strong> Ordets: ${myelevenPoints}`
 }
 
 async function performance() {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/8229/performance?leagueId=5679965`;
+    const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}/performance?leagueId=5679965`;
         const response = await fetch(url, {
     
             method: 'GET',
@@ -102,10 +102,10 @@ async function performance() {
             }
     });
     const performanceData = await response.json(); // Teamcenter Data
-    const performanceElement = performanceData.it[0].ph.find(element => element.cur);
+    const performanceElement = performanceData.it[2].ph.find(element => element.cur);
     const performancePoints = performanceElement.p;
 
-    document.getElementById("performance").innerHTML=`<br><strong>/performance </strong> Grabara: ${performancePoints}`
+    document.getElementById("performance").innerHTML=`<br><strong>/performance </strong> Ordets: ${performancePoints}`
 }
 
 
