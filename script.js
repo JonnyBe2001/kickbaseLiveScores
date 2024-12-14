@@ -45,9 +45,7 @@ async function login() {
 
         token = loginToken;
         hideLoginForm();
-        players();
         myeleven();
-        performance();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
@@ -55,57 +53,44 @@ async function login() {
     }
 }
 
-
-async function players() {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}?leagueId=5679965`;
-        const response = await fetch(url, {
-    
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
-            }
-    });
-    const playerData = await response.json(); // Teamcenter Data
-    const playerPoints = playerData.ph[0]?.p;
-
-    document.getElementById("players").innerHTML=`<strong>/players </strong> Ordets: ${playerPoints}`
-}
-
 async function myeleven() {
     const url = `https://api.kickbase.com/v4/leagues/5679965/teamcenter/myeleven`;
+    try {
         const response = await fetch(url, {
-    
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
-    });
-    const myelevenData = await response.json(); // Teamcenter Data
-    const myelevenPoints = myelevenData.lp[4].p;
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const myelevenData = await response.json(); // Teamcenter Data
 
-    document.getElementById("myeleven").innerHTML=`<br><strong>/myeleven </strong> Ordets: ${myelevenPoints}`
-}
-
-async function performance() {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}/performance?leagueId=5679965`;
-        const response = await fetch(url, {
-    
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
+        // Punkte der ersten 11 Elemente aus `lp`
+        let pointsHTML = `Teampunkte: ${myelevenData.p}<br>--------------------`;
+        for (let i = 0; i < 11; i++) {
+            if (myelevenData.lp[i]) { // Sicherstellen, dass das Element existiert
+                let points = myelevenData.lp[i].p; // Punkte des jeweiligen Elements
+                const name = myelevenData.lp[i].n; // Punkte des jeweiligen Elements
+                if (points === undefined) {
+                    points = "0";
+                }
+                pointsHTML += `<br>${name}: ${points}`;
+            } else {
+                pointsHTML += `<br>Spieler ${i + 1}: Keine Daten verfügbar`;
             }
-    });
-    const performanceData = await response.json(); // Teamcenter Data
-    const performanceElement = performanceData.it[2].ph.find(element => element.cur);
-    const performancePoints = performanceElement.p;
+        }
 
-    document.getElementById("performance").innerHTML=`<br><strong>/performance </strong> Ordets: ${performancePoints}`
+        // Ausgabe der Punkte
+        document.getElementById("mainContent").innerHTML = pointsHTML;
+
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error);
+        document.getElementById("mainContent").innerHTML = "Ein Fehler ist aufgetreten. Bitte überprüfe die Konsole.";
+    }
 }
 
 
