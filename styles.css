@@ -5,7 +5,6 @@ body {
   background-color: #131314;
   display: flex;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
   margin: 0;
   color:#ffffff;
@@ -20,7 +19,7 @@ body {
   max-width: 800px;
   position: relative;
   z-index: 1;
-  margin-top: 20px; /* Abstand nach Login */
+  margin-top: 40px; /* Abstand nach Login */
 }
 
 /* Login-Formular */
