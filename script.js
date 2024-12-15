@@ -65,23 +65,131 @@ async function myeleven() {
         }
         const myelevenData = await response.json(); // Teamcenter Data
 
-        // Punkte der ersten 11 Elemente aus `lp`
-        let pointsHTML = `Teampunkte: ${myelevenData.p}<br>--------------------`;
+        let pointsHTML = `
+            <div class="container-fluid"> <!-- Verwende container-fluid für volle Breite -->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-10 col-lg-6">
+                        <table class="table table-dark custom-table">
+                            <thead>
+                                <tr class="custom-header">
+                                    <th class="text-start custom-cell">Team</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-end custom-cell">${myelevenData.p}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        `;
+
         for (let i = 0; i < 11; i++) {
             if (myelevenData.lp[i]) { // Sicherstellen, dass das Element existiert
                 let points = myelevenData.lp[i].p; // Punkte des jeweiligen Elements
-                const name = myelevenData.lp[i].n; // Punkte des jeweiligen Elements
+                const name = myelevenData.lp[i].n; // Name des jeweiligen Elements
+                let time; 
+                const statusNumber = myelevenData.lp[i].st;
+                let status;
+                let pColor;
+                let tColor;
+
+                if (points<0) {
+                    pColor = "#f94c1f";
+                }
+                else if (points===0) {
+                    pColor = "#7e8187";
+                }
+                else if (points>0 && points<100) {
+                    pColor = "#ee8728";
+                }
+                else if (points>100 && points<200) {
+                    pColor = "#9ddd49";
+                }
+                else if (points>200 && points<400) {
+                    pColor = "#24dc84";   
+                }
+                else if (points>400) {
+                    pColor = "#e1bc37";
+                }
+                else {
+                    pColor = "#a8a8aa";
+                }
+
+
+                if (myelevenData.lp[i].mtd){
+                    time = myelevenData.lp[i].mtd;
+                }
+                else {
+                    time = "0";
+                }
+
+                if (time<1 || time>89){
+                    tColor = "#7e8187";
+                }
+                else {
+                    tColor = "#ffffff";
+                }
+
+
+                if (statusNumber === 5){
+                    status = `<i class="fa-regular fa-thumbs-up" style="color: #25dc84;"></i>`;
+                }
+                else if (statusNumber === 3) {
+                    status = `<i class="fa-solid fa-chair" style="color: #a8a8aa;"></i>`;
+                }
+                else if (statusNumber === 0) {
+                    status = "";
+                }
+                else (
+                    status = `<i class="fa-regular fa-thumbs-down" style="color: #f94c1f;"></i>`
+                )
+
                 if (points === undefined) {
                     points = "0";
                 }
-                pointsHTML += `<br>${name}: ${points}`;
+
+                if (myelevenData.lp[i].k) {
+                    if (myelevenData.lp[i].k.includes(9)) {
+                        status = `<i class="fa-solid fa-arrow-down" style="color: #f94c1f;"></i>`;
+                    }
+                    else if (myelevenData.lp[i].k.includes(8)) {
+                        status = `<i class="fa-solid fa-arrow-up" style="color: #25dc84;"></i>`;
+                    }
+                    else {
+                    }
+                }
+                else {
+                }
+                    
+
+                pointsHTML += `
+                    <tr class="${i % 2 === 0 ? 'custom-row' : 'custom-row-alt'}">
+                        <td class="text-start custom-cell">${name}</td>
+                        <td class="text-start custom-cell">${status}</td>
+                        <td class="text-start custom-cell" style="color: ${tColor}">${time}'</td>
+                        <td class="text-end custom-cell" style="color: ${pColor}"><strong>${points}</strong></td>
+                    </tr>
+                `;
             } else {
-                pointsHTML += `<br>Spieler ${i + 1}: Keine Daten verfügbar`;
+                pointsHTML += `
+                    <tr class="${i % 2 === 0 ? 'custom-row' : 'custom-row-alt'}">
+                        <td class="text-start custom-cell">Spieler ${i + 1}</td>
+                        <td class="text-end custom-cell">Keine Daten verfügbar</td>
+                    </tr>
+                `;
             }
         }
 
-        // Ausgabe der Punkte
+        pointsHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Ausgabe der Tabelle
         document.getElementById("mainContent").innerHTML = pointsHTML;
+
+
 
     } catch (error) {
         console.error("Fehler beim Abrufen der Daten:", error);
