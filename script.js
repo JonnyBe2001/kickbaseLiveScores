@@ -1,23 +1,6 @@
+let token;
+let league;
 
-
-// Globale Variable für das aktuell geöffnete Team
-let currentOpenDropdown = null;
-
-// Funktion zum Öffnen und Schließen von Dropdowns
-function toggleDropdown(event) {
-    const dropdownContent = event.currentTarget.nextElementSibling;
-
-    // Wenn ein anderes Dropdown geöffnet ist, schließen
-    if (currentOpenDropdown && currentOpenDropdown !== dropdownContent) {
-        currentOpenDropdown.classList.remove('show');
-    }
-
-    // Toggle current dropdown
-    dropdownContent.classList.toggle('show');
-
-    // Aktualisieren der offenen Dropdown-Referenz
-    currentOpenDropdown = dropdownContent.classList.contains('show') ? dropdownContent : null;
-}
 
 // Funktion zum Login
 async function login() {
@@ -26,14 +9,17 @@ async function login() {
     const password = document.getElementById('password').value;
 
     const loginData = {
-        email: email,
-        password: password,
-        ext: false
+        em: email,
+        ext: false,
+        loy: false,
+        pass: password,
+        rep:{},
     };
 
     try {
-        const response = await fetch('https://api.kickbase.com/user/login', {
+        const response = await fetch('https://api.kickbase.com/v4/user/login', {
             method: 'POST',
+            mode: 'cors', // CORS hinzufügen
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -46,12 +32,16 @@ async function login() {
         }
 
         const data = await response.json();
-        let loginToken = data.token;
-        localStorage.setItem('token', loginToken);
+        let loginToken = data.tkn;
+        localStorage.setItem("token", loginToken);
+        token = loginToken;
 
-        token = localStorage.getItem('token');
-        document.getElementById('loginForm').classList.add('hidden'); // Verstecke das Login-Formular
-        fetchLeagues();  // Fetch leagues after login
+        leagueId = data.srvl[0]?.id; //get first league
+        localStorage.setItem("league", leagueId);
+        league = leagueId;
+
+        hideLoginForm();
+        myeleven();
 
     } catch (error) {
         console.error('Fehler beim Login:', error);
@@ -59,48 +49,9 @@ async function login() {
     }
 }
 
-// Funktion zum Abrufen der Ligen
-async function fetchLeagues() {
-    if (!token) {
-        console.error('Token ist nicht verfügbar.');
-        return;
-    }
-
+async function myeleven() {
+    const url = `https://api.kickbase.com/v4/leagues/${league}/teamcenter/myeleven`;
     try {
-        const response = await fetch('https://api.kickbase.com/leagues/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Fehler beim Abrufen der Ligen! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        leagueId = data.leagues[0]?.id;
-        console.log('League ID:', leagueId);
-
-        // Fetch league lineup after fetching leagues
-        fetchLeagueLineup();
-
-    } catch (error) {
-        console.error('Fehler beim Abrufen der Ligen:', error);
-    }
-}
-
-// Funktion zum Abrufen der Liga-Aufstellung und Ausgabe der Spielernamen und Live-Punkte
-async function fetchLeagueLineup() {
-    if (!leagueId) {
-        console.error('League ID ist nicht verfügbar.');
-        return;
-    }
-
-    try {
-        const url = `https://api.kickbase.com/leagues/${leagueId}/live`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -109,72 +60,60 @@ async function fetchLeagueLineup() {
                 'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
             }
         });
-
         if (!response.ok) {
-            throw new Error(`Fehler beim Abrufen der Liga-Livepunkte! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const myelevenData = await response.json(); // Teamcenter Data
+
+        // Punkte der ersten 11 Elemente aus `lp`
+        let pointsHTML = `Teampunkte: ${myelevenData.p}<br>--------------------`;
+        for (let i = 0; i < 11; i++) {
+            if (myelevenData.lp[i]) { // Sicherstellen, dass das Element existiert
+                let points = myelevenData.lp[i].p; // Punkte des jeweiligen Elements
+                const name = myelevenData.lp[i].n; // Punkte des jeweiligen Elements
+                if (points === undefined) {
+                    points = "0";
+                }
+                pointsHTML += `<br>${name}: ${points}`;
+            } else {
+                pointsHTML += `<br>Spieler ${i + 1}: Keine Daten verfügbar`;
+            }
         }
 
-        const data = await response.json();
-        const teams = data.u;
-
-        // Leeren des bisherigen Inhalts
-        document.getElementById('lineUpOutput').innerHTML = '';
-
-        // Erstellen der Dropdowns für jedes Team
-        teams.forEach(team => {
-            createDropdown(team.n, team.pl);
-        });
+        // Ausgabe der Punkte
+        document.getElementById("mainContent").innerHTML = pointsHTML;
 
     } catch (error) {
-        console.error('Fehler beim Abrufen der Liga-Livepunkte:', error);
+        console.error("Fehler beim Abrufen der Daten:", error);
+        document.getElementById("mainContent").innerHTML = "Ein Fehler ist aufgetreten. Bitte überprüfe die Konsole.";
     }
 }
 
-// Funktion zum Erstellen von Dropdowns
-function createDropdown(teamName, players) {
-    const container = document.getElementById('lineUpOutput');
-    
-    // Team Header
-    const teamHeader = document.createElement('div');
-    teamHeader.className = 'team-header';
-    teamHeader.textContent = teamName;
-    teamHeader.addEventListener('click', toggleDropdown);
 
-    // Dropdown Content
-    const dropdownContent = document.createElement('div');
-    dropdownContent.className = 'dropdown-content';
-    
-    const table = document.createElement('table');
-    const tableHeader = document.createElement('thead');
-    tableHeader.innerHTML = `<tr><th>Name</th><th>Position</th><th>Punkte</th></tr>`;
-    table.appendChild(tableHeader);
 
-    const tableBody = document.createElement('tbody');
-    players.forEach(player => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${player.n}</td><td>${getPositionLabel(player.p)}</td><td>${player.t}</td>`;
-        tableBody.appendChild(row);
-    });
-    table.appendChild(tableBody);
-
-    dropdownContent.appendChild(table);
-
-    container.appendChild(teamHeader);
-    container.appendChild(dropdownContent);
+// Funktion zum Anzeigen des Login-Formulars
+function showLoginForm() {
+    document.getElementById('loginForm').style.display = '';  // Entfernt den Inline-Stil
 }
 
-// Funktion zum Ermitteln der Position
-function getPositionLabel(position) {
-    switch (position) {
-        case 1:
-            return 'TW'; // Torwart
-        case 2:
-            return 'ABW'; // Abwehr
-        case 3:
-            return 'MF'; // Mittelfeld
-        case 4:
-            return 'ST'; // Stürmer
-        default:
-            return 'Unbekannt'; // Unbekannt
+function hideLoginForm() {
+    document.getElementById('loginForm').classList.add('hidden');  // Zeige das Login-Formular
+
+}
+
+// Funktion zum Überprüfen des Tokens beim Laden der Seite
+window.onload = function() {
+    token = localStorage.getItem('token');
+    league = localStorage.getItem('league');
+    if (token && league) {
+        try {
+            myeleven();
+        }
+        catch {
+            showLoginForm();
+        }
+    }
+    else {
+        showLoginForm();
     }
 }
