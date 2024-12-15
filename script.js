@@ -1,10 +1,5 @@
-// Globale Variable für das aktuell geöffnete Team
-let currentOpenDropdown = null;
-let token = localStorage.getItem('token');  // Token aus dem localStorage laden
-let leagueId = null;
-let userId = null;
-let playerId ="3558";
-
+let token;
+let league;
 
 
 // Funktion zum Login
@@ -38,12 +33,13 @@ async function login() {
 
         const data = await response.json();
         let loginToken = data.tkn;
-        //localStorage.setItem('token', loginToken); Token im localStorage speichern
+        localStorage.setItem("token", loginToken);
+        token = loginToken;
 
         leagueId = data.srvl[0]?.id; //get first league
-        userId = data.u.id;
+        localStorage.setItem("league", leagueId);
+        league = leagueId;
 
-        token = loginToken;
         hideLoginForm();
         myeleven();
 
@@ -54,7 +50,7 @@ async function login() {
 }
 
 async function myeleven() {
-    const url = `https://api.kickbase.com/v4/leagues/5679965/teamcenter/myeleven`;
+    const url = `https://api.kickbase.com/v4/leagues/${league}/teamcenter/myeleven`;
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -107,6 +103,17 @@ function hideLoginForm() {
 
 // Funktion zum Überprüfen des Tokens beim Laden der Seite
 window.onload = function() {
-        // Zeige das Login-Formular, falls kein Token vorhanden ist
+    token = localStorage.getItem('token');
+    league = localStorage.getItem('league');
+    if (token && league) {
+        try {
+            myeleven();
+        }
+        catch {
+            showLoginForm();
+        }
+    }
+    else {
         showLoginForm();
+    }
 }
