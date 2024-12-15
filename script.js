@@ -66,19 +66,16 @@ async function myeleven() {
         const myelevenData = await response.json(); // Teamcenter Data
 
         let pointsHTML = `
-            <div class="container-fluid"> <!-- Verwende container-fluid für volle Breite -->
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-6">
-                        <table class="table table-dark custom-table">
-                            <thead>
-                                <tr class="custom-header">
-                                    <th class="text-start custom-cell">Team</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="text-end custom-cell">${myelevenData.p}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                <table class="custom-table">
+                    <thead>
+                        <tr class="custom-header" style="border-top: 1px solid blue">
+                            <th class="custom-cell" style="text-align: left; padding-right: 20px;">Team</th>
+                            <th></th>
+                            <th></th>
+                            <th class="custom-cell">${myelevenData.p}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
         `;
 
         for (let i = 0; i < 11; i++) {
@@ -161,29 +158,27 @@ async function myeleven() {
                     
 
                 pointsHTML += `
-                    <tr class="${i % 2 === 0 ? 'custom-row' : 'custom-row-alt'}">
-                        <td class="text-start custom-cell">${name}</td>
-                        <td class="text-start custom-cell">${status}</td>
-                        <td class="text-start custom-cell" style="color: ${tColor}">${time}'</td>
-                        <td class="text-end custom-cell" style="color: ${pColor}"><strong>${points}</strong></td>
+                    <tr>
+                        <td class="custom-cell" style="padding-right: 20px; padding-top: 15px;">${name}</td>
+                        <td class="custom-cell" style="padding-right: 20px">${status}</td>
+                        <td class="custom-cell" style="color: ${tColor}; padding-right: 20px; font-size: 14px">${time}'</td>
+                        <td class="custom-cell" style="color: ${pColor}; text-align: right"><strong>${points}</strong></td>
                     </tr>
                 `;
             } else {
                 pointsHTML += `
-                    <tr class="${i % 2 === 0 ? 'custom-row' : 'custom-row-alt'}">
-                        <td class="text-start custom-cell">Spieler ${i + 1}</td>
-                        <td class="text-end custom-cell">Keine Daten verfügbar</td>
+                    <tr>
+                        <td class="custom-cell">Spieler ${i + 1}</td>
+                        <td class="custom-cell">Keine Daten verfügbar</td>
                     </tr>
                 `;
             }
         }
 
         pointsHTML += `
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                    </tbody>
+                </table>
+
         `;
 
         // Ausgabe der Tabelle
