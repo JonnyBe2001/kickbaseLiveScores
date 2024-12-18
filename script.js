@@ -97,13 +97,13 @@ async function myeleven() {
                 else if (points>0 && points<100) {
                     pColor = "#ee8728";
                 }
-                else if (points>100 && points<200) {
+                else if (points>=100 && points<200) {
                     pColor = "#9ddd49";
                 }
-                else if (points>200 && points<400) {
+                else if (points>=200 && points<400) {
                     pColor = "#24dc84";   
                 }
-                else if (points>400) {
+                else if (points>=400) {
                     pColor = "#e1bc37";
                 }
                 else {
