@@ -1,10 +1,10 @@
 /* Grundlegendes Styling für das Layout */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16pt;
   background-color: #131314;
   display: flex;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
   margin: 0;
   color:#ffffff;
@@ -19,7 +19,7 @@ body {
   max-width: 800px;
   position: relative;
   z-index: 1;
-  margin-top: 20px; /* Abstand nach Login */
+  margin-top: 40px; /* Abstand nach Login */
 }
 
 /* Login-Formular */
@@ -86,24 +86,23 @@ button:hover {
   width: 100%;
 }
 
-th,
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-
-th {
-  background-color: #f4f4f4;
-  color:#131314;
-}
-
-tbody {
-  color: white;
-}
-
 #loginForm.hidden {
   display: none;
 }
 
+.custom-table {
+  background-color: #131314 !important;
+  color: #ffffff !important;
+}
 
+
+.footer {
+  position: fixed; /* Fixiert das Element am Bildschirmrand */
+  bottom: 0;       /* Positioniert es am unteren Rand */
+  width: 100%;     /* Nimmt die gesamte Breite der Seite ein */
+  text-align: center; /* Zentriert den Text */
+  padding: 10px;   /* Fügt etwas Innenabstand hinzu */
+  background-color: #131314; /* Passt zum restlichen Design */
+  color: #aaa;     /* Dezente Schriftfarbe */
+  font-size: 14px; /* Kleinere Schriftgröße */
+}
