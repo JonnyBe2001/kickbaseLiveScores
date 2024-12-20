@@ -77,6 +77,7 @@ async function myeleven() {
                     </thead>
                     <tbody>
         `;
+        console.log(myelevenData);
 
         for (let i = 0; i < 11; i++) {
             if (myelevenData.lp[i]) { // Sicherstellen, dass das Element existiert
@@ -158,7 +159,7 @@ async function myeleven() {
                     
 
                 pointsHTML += `
-                    <tr>
+                    <tr onclick="handleRowClick(${myelevenData.lp[i].i});" style="cursor: pointer;">
                         <td class="custom-cell" style="padding-right: 20px; padding-top: 15px;">${name}</td>
                         <td class="custom-cell" style="padding-right: 20px">${status}</td>
                         <td class="custom-cell" style="color: ${tColor}; padding-right: 20px; font-size: 14px">${time}'</td>
@@ -203,6 +204,12 @@ function hideLoginForm() {
     document.getElementById('loginForm').classList.add('hidden');  // Zeige das Login-Formular
 
 }
+
+function handleRowClick (selectedPlayerId) {
+    localStorage.setItem("player", selectedPlayerId);
+    window.location.href = "player.html";
+}
+
 
 // Funktion zum Überprüfen des Tokens beim Laden der Seite
 window.onload = function() {
