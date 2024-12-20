@@ -22,6 +22,11 @@ body {
   margin-top: 40px; /* Abstand nach Login */
 }
 
+#loginForm {
+  z-index: 1000;
+}
+
+
 /* Login-Formular */
 .login-box {
   background: #131314;
