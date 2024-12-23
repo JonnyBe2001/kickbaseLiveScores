@@ -115,5 +115,17 @@ button:hover {
 
 #btn {
   margin-top: 30px;
-  color: white;
+  border: none;
+  color: #fb4404;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 50px;
+  border: 1px solid #fb4404;
+}
+
+#topBtn {
+  margin-top: 30px;
 }
