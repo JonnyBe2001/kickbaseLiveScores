@@ -1,5 +1,9 @@
+let token;
+let league;
+let playerId;
+
 async function playerCenter () {
-    const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=5679965`;
+    const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
