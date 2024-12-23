@@ -129,3 +129,55 @@ button:hover {
 #topBtn {
   margin-top: 30px;
 }
+
+#search-input {
+  color: #7e8187;
+  background-color: #131314;
+  margin-top: 5vh;
+  width: 60vw;
+  border: none;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 50px;
+  border: 1px solid #7e8187;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 80%;
+  max-width: 350px;
+  position: relative;
+  z-index: 1;
+  margin-top: 40px; /* Abstand nach Login */
+}
+
+.left-button, .right-button {
+  text-decoration: none;       /* Entfernt Unterstreichung */
+  background-color: transparent; /* Durchsichtiger Hintergrund */
+  border: none;
+  cursor: pointer;
+}
+
+.center-text {
+  flex-grow: 1;                /* Sorgt dafür, dass der Text "MY11" in der Mitte wächst */
+  text-align: center;          /* Zentriert den Text */
+  color: #fb4404;              /* Textfarbe */
+}
+
+#left-btn {
+  padding-right: 50px;
+}
+
+#right-btn {
+  padding-left: 50px;
+}
+
+.player-table tr {
+  cursor: pointer;
+}
