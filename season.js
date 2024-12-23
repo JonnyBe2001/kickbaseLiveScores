@@ -22,37 +22,21 @@ async function showLeaderboard () {
     <table>
         <thead>
             <tr>
-                <th style="text-align: left; padding-right: 100px;"><a id="topBtn" href="leaderboard.html" style="color: #fb4404;">MD ${currentMatchday}</a></th>
-                <th><a id="topBtn" href="season.html" style="color: #a8a8aa; text-decoration: none;">Saison</a></th>
+                <th style="text-align: left; padding-right: 100px;"><a id="topBtn" href="leaderboard.html" style="color: #a8a8aa; text-decoration: none;">MD ${currentMatchday}</a></th>
+                <th><a id="topBtn" href="season.html" style="color: #fb4404;">Saison</a></th>
             </tr>
         </thead>
         <tbody>`;
 
-    // Daten nach `mdp` sortieren (absteigend)
-    leaderboardData.us.sort((a, b) => b.mdp - a.mdp);
+    // Daten nach `sp` sortieren (absteigend)
+    leaderboardData.us.sort((a, b) => b.sp - a.sp);
 
     // Daten hinzufügen
     leaderboardData.us.forEach(user => {
-        if (user.mdp<500) {
-            pColor = "#f94c1f";
-        }
-        else if (user.mdp>=500 && user.mdp<750) {
-            pColor = "#ee8728";
-        }
-        else if (user.mdp>=750 && user.mdp<1500) {
-            pColor = "#9ddd49";
-        }
-        else if (user.mdp>=1500) {
-            pColor = "#24dc84";   
-        }
-        else if (user.mdp>=400) {
-            pColor = "#e1bc37";
-        }
-
         tableHTML += `
             <tr>
-                <td style="padding-top:20px;">${user.n}</td>
-                <td style="text-align: right; color: ${pColor}; padding-top:20px;"><strong>${user.mdp}</strong></td>
+                <td style="padding-top:20px; padding-right: 40px;">${user.n}</td>
+                <td style="text-align: right; padding-top:20px;"><strong>${user.sp}</strong></td>
             </tr>`;
     });
 

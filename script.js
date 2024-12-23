@@ -186,10 +186,9 @@ async function myeleven() {
         document.getElementById("mainContent").innerHTML = pointsHTML;
 
 
-
     } catch (error) {
         console.error("Fehler beim Abrufen der Daten:", error);
-        document.getElementById("mainContent").innerHTML = "Ein Fehler ist aufgetreten. Bitte überprüfe die Konsole.";
+        document.getElementById("mainContent").innerHTML = "Ein Fehler ist aufgetreten. Bitte melde dich bei Jonas";
     }
 }
 
