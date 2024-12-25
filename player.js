@@ -4,11 +4,19 @@ let playerId;
 
 // Mapping der Event-IDs zu Wörtern
 const eventMap = new Map([
+    [49, "Präziser langer Pass"],
+    [52, "Luftzweikampf verloren"],
+    [46, "Pass gegn. Hälfte"],
+    [106, "Ausgespielt worden"],
+    [124, "Pass gestört"],
     [143, "Pass vord. Drittel"],
+    [144, "Torschussvorlage"],
+    [154, "Gewonnener Zweikampf"],
+    [156, "Startelf"],
+    [160, "Tor kassiert"],
     [166, "Spiel verloren"],
     [167, "Minutenbonus"],
-    [124, "Pass gestört"],
-    // Füge hier alle weiteren Event-IDs und deren Wörter hinzu
+    [174, `<i class="fa-solid fa-bullseye" style="color: #ffffff;"></i> Tor (MF) `],
 ]);
 
 // Funktion zum Abrufen des zugeordneten Wortes für eine Event-ID
@@ -50,8 +58,12 @@ async function playerCenter () {
             let points = event.p;  // Punkte
             let pColor;
             const eventWord = getEventWord(event.eti); // Direkt die Funktion aufrufen
-            if (points > 0) {
-                pColor = "#25dc84";
+            if (points > 0 && points < 15) {
+                pColor = "#9ddd49";
+                points = `+${points}`;
+            }
+            else if (points >= 15) {
+                pColor = "#24dc84";
                 points = `+${points}`;
             }
             else if (points === 0) { 
