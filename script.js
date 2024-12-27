@@ -187,8 +187,8 @@ async function myeleven() {
 
 
     } catch (error) {
+        showLoginForm();
         console.error("Fehler beim Abrufen der Daten:", error);
-        document.getElementById("mainContent").innerHTML = "Ein Fehler ist aufgetreten. Bitte melde dich bei Jonas";
     }
 }
 
