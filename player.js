@@ -5,9 +5,10 @@ let playerId;
 // Mapping der Event-IDs zu Wörtern
 const eventMap = new Map([
     [49, "Präziser langer Pass"],
-    [52, "Luftzweikampf verloren"],
+    [45, "Flanke"],
     [46, "Pass gegn. Hälfte"],
     [48, "Erfolgr. Abwurf (TW)"],
+    [52, "Luftzweikampf verloren"],
     [79, "Schhuss gehalten"],
     [106, "Ausgespielt worden"],
     [113, "Geklärt"],
@@ -15,11 +16,14 @@ const eventMap = new Map([
     [121, "Flanke abgefangen (TW)"],
     [124, "Pass gestört"],
     [135, "Faustabwehr"],
+    [136, `Rote Karte <i class="fa-solid fa-square" style="color: #f94c1f;"></i>`],
     [137, "Schuss gehalten (TW)"],
     [142, "Ball im Stand abgew. (TW)"],
     [143, "Pass vord. Drittel"],
     [144, "Torschussvorlage"],
+    [152, "Gegner ausgedribbelt"],
     [154, "Gewonnener Zweikampf"],
+    [155, `Gelbe Karte <i class="fa-solid fa-square" style="color: #FFD43B;"></i>`],
     [156, "Startelf"],
     [157, "Ballverlust"],
     [159, "Teamtor"],
@@ -81,7 +85,7 @@ async function playerCenter () {
             }
             else {
                 pColor = "#f94c1f";
-            }
+            }    
 
             plCenterTable += `
                     <tr>
