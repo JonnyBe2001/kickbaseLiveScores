@@ -51,7 +51,7 @@ async function showLeaderboard () {
         }
 
         tableHTML += `
-            <tr>
+            <tr onclick="handleRowClick(${user.i})">
                 <td style="padding-top:20px;">${user.n}</td>
                 <td style="text-align: right; color: ${pColor}; padding-top:20px;"><strong>${mdp}</strong></td>
             </tr>`;
@@ -64,6 +64,13 @@ async function showLeaderboard () {
     // Tabelle in die Seite einfügen
     document.getElementById("mainContent").innerHTML = tableHTML;
 
+}
+
+async function handleRowClick (oponentId) {
+    console.log(oponentId);
+    localStorage.setItem('oponent', oponentId);
+    localStorage.setItem('currMd', currentMatchday);
+    window.location.href = 'oponent.html';
 }
 
 async function getMatchday () {
