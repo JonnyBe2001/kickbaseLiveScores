@@ -3,8 +3,8 @@
   "short_name": "Kickbase Live",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#131314",
+  "theme_color": "#131314",
   "icons": [
     {
       "src": "icons/192x192.png",
