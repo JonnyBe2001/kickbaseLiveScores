@@ -1,69 +1,11 @@
 let token;
 let league;
 let playerId;
+let eventMap = new Map(); // Dynamische Map für Eventtypen
 
-// Mapping der Event-IDs zu Wörtern
-const eventMap = new Map([
-    [49, "Präziser langer Pass"],
-    [45, "Flanke"],
-    [46, "Pass gegn. Hälfte"],
-    [48, "Erfolgr. Abwurf (TW)"],
-    [52, "Luftzweikampf verloren"],
-    [79, "Luftzweikampf gewonnen"],
-    [86, "Fernschusstor (Bonus)"],
-    [87, `Elfmeter verwandelt <i class="fa-solid fa-bullseye" style="color: #ffffff;"></i>`],
-    [103, "Großchance vergeben"],
-    [104, "Flanke geblockt"],
-    [106, "Ausgespielt worden"],
-    [111, "Parade (TW)"],
-    [113, "Geklärt"],
-    [112, "Ballbesitz n. gebl. Schuss"],
-    [117, "Foul"],
-    [118, "Gefoult im letzten Drittel"],
-    [121, "Flanke abgefangen (TW)"],
-    [124, "Pass gestört"],
-    [125, "Ballgewinn"],
-    [130, "Ball zu weit vorgelegt"],
-    [132, "Elfmeter verschuldet"],
-    [135, "Faustabwehr"],
-    [136, `Rote Karte <i class="fa-solid fa-square" style="color: #f94c1f;"></i>`],
-    [137, "Schuss gehalten (TW)"],
-    [138, "Fernschuss gehalten (TW)"],
-    [142, "Ball im Stand abgew. (TW)"],
-    [143, "Pass vord. Drittel"],
-    [144, "Torschussvorlage"],
-    [148, "Abseits"],
-    [149, "Torschuss (aufs Tor)"],
-    [152, "Gegner ausgedribbelt"],
-    [153, "Ecke rausgeholt"],
-    [154, "Gewonnener Zweikampf"],
-    [155, `Gelbe Karte <i class="fa-solid fa-square" style="color: #FFD43B;"></i>`],
-    [156, "Startelf"],
-    [157, "Ballverlust"],
-    [159, "Teamtor"],
-    [160, "Tor kassiert"],
-    [165, "Spiel gewonnen"],
-    [166, "Spiel verloren"],
-    [167, "Minutenbonus"],
-    [170, "Teamtor"],
-    [171, "Tor kassiert"],
-    [174, `Tor (MF) <i class="fa-solid fa-bullseye" style="color: #ffffff;"></i>`],
-    [175, `Tor (ABW) <i class="fa-solid fa-bullseye" style="color: #ffffff;"></i>`],
-    [176, `Tor (ANG) <i class="fa-solid fa-bullseye" style="color: #ffffff;"></i>`],
-    [185, `Tor (EINW) <i class="fa-solid fa-bullseye" style="color: #ffffff;"></i>`],
-    [191, "Zu Null gespielt (ANG)"],
-    [200, "Torschuss (geblockt)"],
-    [207, "Schuss geblockt"],
-    [208, "Schuss geblockt"],
-]);
-
-// Funktion zum Abrufen des zugeordneten Wortes für eine Event-ID
-function getEventWord(eventId) {
-    return eventMap.get(eventId) || "";
-}
-
-async function playerCenter () {
-    const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
+// API-Call, um Eventtypen abzurufen
+async function fetchEventTypes() {
+    const url = `https://api.kickbase.com/v4/live/eventtypes`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -72,61 +14,91 @@ async function playerCenter () {
             'Authorization': `Bearer ${token}` // Authentifizierung mit Bearer-Token
         }
     });
+
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
+    const eventTypesData = await response.json();
+
+    // Erstelle das Mapping aus der API-Antwort
+    eventTypesData.it.forEach(event => {
+        eventMap.set(event.i, event.ti);
+    });
+
+    console.log("EventMap erfolgreich geladen:", eventMap);
+}
+
+// Funktion zum Abrufen des zugeordneten Wortes für eine Event-ID
+function getEventWord(eventId) {
+    return eventMap.get(eventId) || ""; // Standardwert, falls ID nicht gefunden
+}
+
+async function playerCenter() {
+    const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const plCenterData = await response.json(); // PlayerCenter Data
     console.log(plCenterData);
+
     const events = plCenterData.events;
-    let playerPoints = plCenterData.p;
-    if (playerPoints === undefined){
-        playerPoints = 0;
-    }
+    let playerPoints = plCenterData.p || 0;
+
     document.getElementById("playerPicture").innerHTML = `<img src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png" alt="Player Picture" style="width: 100px; height: auto; vertical-align: middle;">`;
     document.getElementById("playerName").innerHTML = `<strong>${plCenterData.n} ${playerPoints}</strong>`;
+
     let plCenterTable = `
     <table class="custom-table">
-                    <thead>
-                        <tr class="custom-header">
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+        <thead>
+            <tr class="custom-header">
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>`;
+
     if (events && events.length > 0) {
         events.forEach(event => {
             const matchTime = event.mt; // Spielminute
             let points = event.p;  // Punkte
             let pColor;
-            const eventWord = getEventWord(event.eti); // Direkt die Funktion aufrufen
+            const eventWord = getEventWord(event.eti); // Dynamische Zuordnung
+
             if (points > 0 && points < 15) {
                 pColor = "#9ddd49";
                 points = `+${points}`;
-            }
-            else if (points >= 15) {
+            } else if (points >= 15) {
                 pColor = "#24dc84";
                 points = `+${points}`;
-            }
-            else if (points === 0) { 
-                return;  // Nichts tun, wenn Punkte 0 sind
-            }
-            else {
+            } else if (points === 0) {
+                return; // Ignorieren, wenn Punkte 0 sind
+            } else {
                 pColor = "#f94c1f";
-            }    
+            }
 
             plCenterTable += `
-                    <tr>
-                        <td class="custom-cell" style="padding-right: 10px; padding-top: 15px; color: ${pColor};"><strong>${points}</strong></td>
-                        <td style="padding-top: 15px; padding-right: 10px; font-size: 14px">${eventWord}</td>
-                        <td class="custom-cell" style="text-align: right; padding-top: 15px; font-size: 14px; color: #7e8187">${matchTime}'</td>
-                    </tr>
-                `;
+                <tr>
+                    <td class="custom-cell" style="padding-right: 10px; padding-top: 15px; color: ${pColor};"><strong>${points}</strong></td>
+                    <td style="padding-top: 15px; padding-right: 10px; font-size: 14px">${eventWord}</td>
+                    <td class="custom-cell" style="text-align: right; padding-top: 15px; font-size: 14px; color: #7e8187">${matchTime}'</td>
+                </tr>`;
         });
+
         plCenterTable += `
-                    </tbody>
-                </table>
-        `;
+            </tbody>
+        </table>`;
         document.getElementById("mainContent").innerHTML = plCenterTable;
 
     } else {
@@ -134,20 +106,21 @@ async function playerCenter () {
     }
 }
 
-// Funktion zum Überprüfen des Tokens beim Laden der Seite
-window.onload = function() {
+// Funktion zum Überprüfen des Tokens und Laden der Eventtypen
+window.onload = async function () {
     token = localStorage.getItem('token');
     league = localStorage.getItem('league');
     playerId = localStorage.getItem('player');
+
     if (token && league && playerId) {
         try {
-            playerCenter();
-        }
-        catch {
+            await fetchEventTypes(); // Eventtypen laden
+            playerCenter(); // Player-Daten laden
+        } catch (error) {
+            console.error(error);
             window.location.href = "index.html";
         }
-    }
-    else {
+    } else {
         window.location.href = "index.html";
     }
-}
+};
