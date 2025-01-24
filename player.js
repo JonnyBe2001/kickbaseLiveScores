@@ -68,8 +68,12 @@ async function playerCenter () {
     const plCenterData = await response.json(); // PlayerCenter Data
     console.log(plCenterData);
     const events = plCenterData.events;
+    let playerPoints = plCenterData.p;
+    if (playerPoints === undefined){
+        playerPoints = 0;
+    }
     document.getElementById("playerPicture").innerHTML = `<img src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png" alt="Player Picture" style="width: 100px; height: auto; vertical-align: middle;">`;
-    document.getElementById("playerName").innerHTML = `<strong>${plCenterData.n} ${plCenterData.p}</strong>`;
+    document.getElementById("playerName").innerHTML = `<strong>${plCenterData.n} ${playerPoints}</strong>`;
     let plCenterTable = `
     <table class="custom-table">
                     <thead>
