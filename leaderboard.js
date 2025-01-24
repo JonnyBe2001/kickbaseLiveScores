@@ -51,7 +51,7 @@ async function showLeaderboard () {
         }
 
         tableHTML += `
-            <tr onclick="handleRowClick(${user.i})">
+            <tr style="cursor: pointer;" onclick="handleRowClick(${user.i})">
                 <td style="padding-top:20px;">${user.n}</td>
                 <td style="text-align: right; color: ${pColor}; padding-top:20px;"><strong>${mdp}</strong></td>
             </tr>`;

@@ -87,7 +87,7 @@ async function oponentsEleven() {
 
                 pointsHTML += `
                     <tr onclick="handleRowClick(${plCenterData.i});" style="cursor: pointer;">
-                        <td>${plCenterData.n}</td>
+                        <td style="padding-top: 15px;">${plCenterData.n}</td>
                         <td></td>
                         <td></td>
                         <td class="custom-cell" style="color: ${pColor}; text-align: right"><strong>${points}</strong></td>
@@ -98,7 +98,7 @@ async function oponentsEleven() {
                 // Hier kannst du ein Platzhalterwert oder eine Fehlermeldung anzeigen, wenn der API-Aufruf fehlschlägt
                 pointsHTML += `
                     <tr>
-                        <td>Error</td>
+                        <td style="padding-top: 15px;">Error</td>
                         <td></td>
                         <td></td>
                         <td>--</td>
@@ -109,7 +109,7 @@ async function oponentsEleven() {
 
         pointsHTML += `
                 <tr>
-                    <td><strong>Total</strong></td>
+                    <td style="padding-top: 15px;"><strong>Total</strong></td>
                     <td></td>
                     <td></td>
                     <td><strong>${totalPoints}</strong></td>
