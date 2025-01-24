@@ -27,32 +27,33 @@ async function showLeaderboard () {
             </tr>
         </thead>
         <tbody>`;
-
     // Daten nach `mdp` sortieren (absteigend)
     leaderboardData.us.sort((a, b) => b.mdp - a.mdp);
 
     // Daten hinzufügen
     leaderboardData.us.forEach(user => {
-        if (user.mdp<500) {
+        const mdp = user.mdp !== undefined ? user.mdp : 0; // Fallback auf 0, falls mdp nicht definiert ist
+        let pColor;
+        if (mdp<500) {
             pColor = "#f94c1f";
         }
-        else if (user.mdp>=500 && user.mdp<750) {
+        else if (mdp>=500 && user.mdp<750) {
             pColor = "#ee8728";
         }
-        else if (user.mdp>=750 && user.mdp<1500) {
+        else if (mdp>=750 && user.mdp<1500) {
             pColor = "#9ddd49";
         }
-        else if (user.mdp>=1500) {
+        else if (mdp>=1500) {
             pColor = "#24dc84";   
         }
-        else if (user.mdp>=400) {
+        else if (mdp>=400) {
             pColor = "#e1bc37";
         }
 
         tableHTML += `
             <tr>
                 <td style="padding-top:20px;">${user.n}</td>
-                <td style="text-align: right; color: ${pColor}; padding-top:20px;"><strong>${user.mdp}</strong></td>
+                <td style="text-align: right; color: ${pColor}; padding-top:20px;"><strong>${mdp}</strong></td>
             </tr>`;
     });
 
