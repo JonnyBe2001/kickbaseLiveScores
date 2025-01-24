@@ -26,15 +26,6 @@ async function oponentsEleven() {
         console.log(`Name: ${playerName}`);
         console.log(`LineUp: ${lineUp}`);
         let pointsHTML = `
-                <table class="custom-table">
-                    <thead>
-                        <tr class="custom-header" style="border-top: 1px solid blue">
-                            <th class="custom-cell" style="text-align: left; padding-right: 20px;">${playerName}</th>
-                            <th></th>
-                            <th></th>
-                            <th class="custom-cell"></th>
-                        </tr>
-                    </thead>
                     <tbody>          
         `;
         for (const playerId of lineUp) {
@@ -90,7 +81,7 @@ async function oponentsEleven() {
                         <td style="padding-top: 15px;">${plCenterData.n}</td>
                         <td></td>
                         <td></td>
-                        <td class="custom-cell" style="color: ${pColor}; text-align: right"><strong>${points}</strong></td>
+                        <td class="custom-cell" style="color: ${pColor}; text-align: right; padding-top: 15px;"><strong>${points}</strong></td>
                     </tr>
                 `;
             } catch (error) {
@@ -108,23 +99,26 @@ async function oponentsEleven() {
         }
 
         pointsHTML += `
-                <tr>
-                    <td style="padding-top: 15px;"><strong>Total</strong></td>
-                    <td></td>
-                    <td></td>
-                    <td><strong>${totalPoints}</strong></td>
-                </tr>
+                
                 </tbody>
                 </table>
                 `;
 
+        let pointsHTMLHeader = `
+            <table class="custom-table">
+                <thead>
+                    <tr class="custom-header">
+                        <th class="custom-cell" style="text-align: left; padding-right: 20px;">${playerName}</th>
+                        <th></th>
+                        <th></th>
+                        <th class="custom-cell">${totalPoints}</th>
+                    </tr>
+                </thead>
+        `
+        pointsHTML = pointsHTMLHeader + pointsHTML;
         // Die fertige HTML-Struktur in das "mainContent"-Element einfügen
         document.getElementById("mainContent").innerHTML = pointsHTML;
-        pointsHTML += `
-                </tbody>
-                </table>
-                `
-        document.getElementById("mainContent").innerHTML = pointsHTML;
+        
     } else {
         console.log('Spieler nicht gefunden!');
     }
