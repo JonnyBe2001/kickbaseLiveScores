@@ -1,25 +1,17 @@
 const { chromium } = require('playwright');
 
 (async () => {
+    // **Broowser Setup**
     // Starten des Browsers im Headless-Modus
     const browser = await chromium.launch({ headless: false });
     const page = await browser.newPage();
 
     // Tableau-URL anpassen
-    const tableauUrl = 'https://public.tableau.com/app/profile/michael.mauthe/viz/Kickbase_Matchup_Tool_v1/Kickbase_Matchup_Tool';
+    const tableauUrl = 'https://public.tableau.com/views/Kickbase_Matchup_Tool_v1/Kickbase_Matchup_Tool?%3Adisplay_static_image=y&%3AbootstrapWhenNotified=true&%3Aembed=true&%3Alanguage=de-DE&:embed=y&:showVizHome=n&:apiID=host0#navType=0&navSrc=Parse';
     console.log(`Öffne URL: ${tableauUrl}`);
     
     // Navigiere zur Tableau-Seite
     await page.goto(tableauUrl);
-
-    // **1. Cookies akzeptieren**
-    try {
-        await page.waitForSelector('//*[@id="onetrust-accept-btn-handler"]', { timeout: 5000 });
-        await page.click('//*[@id="onetrust-accept-btn-handler"]');
-        console.log('Cookie-Banner akzeptiert.');
-    } catch (e) {
-        console.log('Cookie-Banner nicht gefunden oder bereits akzeptiert.');
-    }
 
     // Warten, bis die Seite vollständig geladen ist
     try {
@@ -29,16 +21,49 @@ const { chromium } = require('playwright');
         console.log('Seite konnte nicht vollständig geladen werden.');
     }
 
+    // Viewport setzen um alle 18 Teams auf das PDF zu bekommen
+    await page.setViewportSize({ width: 1920, height: 1080 });
+
     // **2. Download Layout öffnen**
     try {
-        await page.waitForSelector('//*[@id="downloadIcon"]', { timeout: 5000 });
-        console.log('Download Layout gefunden');
-        await page.click('//*[@id="downloadIcon"]');
+        await page.waitForSelector('//*[@id="download"]', { timeout: 5000 });
+        console.log('Download Button');
+        await page.click('//*[@id="download"]');
         console.log('Download Layout geöffnet');
     } catch (e) {
         console.log('Download Layout konnte nicht gefunden oder geöffnet werden!');
     }
 
+    // **3. Klick auf PDF Button**
+    try {
+        await page.waitForSelector('//*[@id="viz-viewer-toolbar-download-menu"]/div[2]/div/div/span[1]', { timeout: 5000 });
+        console.log('Download Layout gefunden');
+        await page.click('//*[@id="viz-viewer-toolbar-download-menu"]/div[2]/div/div/span[1]', {timeout: 7000});
+        console.log('PDF Button geklickt');
+    } catch (e) {
+        console.log('Download Layout konnte nicht gefunden oder PDF Button nicht geklickt werden!');
+    }
+
+    // **3. Download-Button klicken und auf den Download warten**
+    try {
+        await page.waitForSelector('//*[@id="export-pdf-dialog-Dialog-Body-Id"]/div/div[4]/button', { timeout: 5000 });
+        console.log('Download Button gefunden');
+
+        // Auf den Download warten und dann klicken
+        const [download] = await Promise.all([
+            page.waitForEvent('download'), // Warte auf den Download
+            page.click('//*[@id="export-pdf-dialog-Dialog-Body-Id"]/div/div[4]/button', { timeout: 7000 })
+        ]);
+
+        // Speichern der Datei in den gewünschten Ordner
+        const filePath = `automation/pdf/test.pdf`;
+        await download.saveAs(filePath);
+        console.log(`Download erfolgreich: ${filePath}`);
+    } catch (e) {
+        console.log('Download Button konnte nicht gefunden oder geklickt werden!');
+    }
+
+
+
     // Browser schließen
-    await browser.close();
 })();
