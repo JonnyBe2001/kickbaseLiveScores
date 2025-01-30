@@ -1,11 +1,7 @@
 const { chromium } = require('playwright');
 
-(async () => {
-    // **Broowser Setup**
-    // Starten des Browsers im Headless-Modus
-    const browser = await chromium.launch({ headless: false });
-    const page = await browser.newPage();
-
+// Funktion zum Download von PDF
+async function downloadPdf(page) {
     // Tableau-URL anpassen
     const tableauUrl = 'https://public.tableau.com/views/Kickbase_Matchup_Tool_v1/Kickbase_Matchup_Tool?%3Adisplay_static_image=y&%3AbootstrapWhenNotified=true&%3Aembed=true&%3Alanguage=de-DE&:embed=y&:showVizHome=n&:apiID=host0#navType=0&navSrc=Parse';
     console.log(`Öffne URL: ${tableauUrl}`);
@@ -38,13 +34,13 @@ const { chromium } = require('playwright');
     try {
         await page.waitForSelector('//*[@id="viz-viewer-toolbar-download-menu"]/div[2]/div/div/span[1]', { timeout: 5000 });
         console.log('Download Layout gefunden');
-        await page.click('//*[@id="viz-viewer-toolbar-download-menu"]/div[2]/div/div/span[1]', {timeout: 7000});
+        await page.click('//*[@id="viz-viewer-toolbar-download-menu"]/div[2]/div/div/span[1]', { timeout: 7000 });
         console.log('PDF Button geklickt');
     } catch (e) {
         console.log('Download Layout konnte nicht gefunden oder PDF Button nicht geklickt werden!');
     }
 
-    // **3. Download-Button klicken und auf den Download warten**
+    // **4. Download-Button klicken und auf den Download warten**
     try {
         await page.waitForSelector('//*[@id="export-pdf-dialog-Dialog-Body-Id"]/div/div[4]/button', { timeout: 5000 });
         console.log('Download Button gefunden');
@@ -62,8 +58,16 @@ const { chromium } = require('playwright');
     } catch (e) {
         console.log('Download Button konnte nicht gefunden oder geklickt werden!');
     }
+}
 
-
+// Browser und Page Setup
+(async () => {
+    const browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage();
+    
+    // Funktion zum PDF-Download ausführen
+    await downloadPdf(page);
 
     // Browser schließen
+    await browser.close();
 })();
