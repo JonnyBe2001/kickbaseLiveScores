@@ -1,5 +1,17 @@
 const { chromium } = require('playwright');
 
+// Browser und Page Setup
+(async () => {
+    const browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage();
+    
+    // Funktion zum PDF-Download ausführen
+    await downloadPdf(page);
+
+    // Browser schließen
+    await browser.close();
+})();
+
 // Funktion zum Download von PDF
 async function downloadPdf(page) {
     // Tableau-URL anpassen
@@ -59,15 +71,3 @@ async function downloadPdf(page) {
         console.log('Download Button konnte nicht gefunden oder geklickt werden!');
     }
 }
-
-// Browser und Page Setup
-(async () => {
-    const browser = await chromium.launch({ headless: true });
-    const page = await browser.newPage();
-    
-    // Funktion zum PDF-Download ausführen
-    await downloadPdf(page);
-
-    // Browser schließen
-    await browser.close();
-})();
