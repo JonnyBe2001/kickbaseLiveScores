@@ -1,0 +1,370 @@
+{
+  "torwart": [
+    {
+      "rank": 18,
+      "name": "VfL Bochum",
+      "teamId": 24
+    },
+    {
+      "rank": 17,
+      "name": "SC Freiburg",
+      "teamId": 5
+    },
+    {
+      "rank": 16,
+      "name": "VfB Stuttgart",
+      "teamId": 9
+    },
+    {
+      "rank": 15,
+      "name": "TSG Hoffenheim",
+      "teamId": 14
+    },
+    {
+      "rank": 14,
+      "name": "FC Heidenheim",
+      "teamId": 50
+    },
+    {
+      "rank": 13,
+      "name": "FC Union Berlin",
+      "teamId": 40
+    },
+    {
+      "rank": 12,
+      "name": "FC StPauli",
+      "teamId": 39
+    },
+    {
+      "rank": 11,
+      "name": "SV Werder Bremen",
+      "teamId": 10
+    },
+    {
+      "rank": 10,
+      "name": "KSV Holstein",
+      "teamId": 51
+    },
+    {
+      "rank": 9,
+      "name": "FC Bayern München",
+      "teamId": 2
+    },
+    {
+      "rank": 8,
+      "name": "FC Augsburg",
+      "teamId": 13
+    },
+    {
+      "rank": 7,
+      "name": "Bayer 04 Leverkusen",
+      "teamId": 7
+    },
+    {
+      "rank": 6,
+      "name": "Borussia Mönchengladbach",
+      "teamId": 15
+    },
+    {
+      "rank": 5,
+      "name": "Borussia Dortmund",
+      "teamId": 3
+    },
+    {
+      "rank": 4,
+      "name": "RB Leipzig",
+      "teamId": 43
+    },
+    {
+      "rank": 3,
+      "name": "Eintracht Frankfurt",
+      "teamId": 4
+    },
+    {
+      "rank": 2,
+      "name": "FSV Mainz 05",
+      "teamId": 18
+    },
+    {
+      "rank": 1,
+      "name": "VfL Wolfsburg",
+      "teamId": 11
+    }
+  ],
+  "abwehr": [
+    {
+      "rank": 18,
+      "name": "VfL Bochum",
+      "teamId": 24
+    },
+    {
+      "rank": 17,
+      "name": "FC Heidenheim",
+      "teamId": 50
+    },
+    {
+      "rank": 16,
+      "name": "TSG Hoffenheim",
+      "teamId": 14
+    },
+    {
+      "rank": 15,
+      "name": "FC Union Berlin",
+      "teamId": 40
+    },
+    {
+      "rank": 14,
+      "name": "FC StPauli",
+      "teamId": 39
+    },
+    {
+      "rank": 13,
+      "name": "KSV Holstein",
+      "teamId": 51
+    },
+    {
+      "rank": 12,
+      "name": "FC Augsburg",
+      "teamId": 13
+    },
+    {
+      "rank": 11,
+      "name": "SC Freiburg",
+      "teamId": 5
+    },
+    {
+      "rank": 10,
+      "name": "FSV Mainz 05",
+      "teamId": 18
+    },
+    {
+      "rank": 9,
+      "name": "VfL Wolfsburg",
+      "teamId": 11
+    },
+    {
+      "rank": 8,
+      "name": "Borussia Mönchengladbach",
+      "teamId": 15
+    },
+    {
+      "rank": 7,
+      "name": "SV Werder Bremen",
+      "teamId": 10
+    },
+    {
+      "rank": 6,
+      "name": "Borussia Dortmund",
+      "teamId": 3
+    },
+    {
+      "rank": 5,
+      "name": "Eintracht Frankfurt",
+      "teamId": 4
+    },
+    {
+      "rank": 4,
+      "name": "VfB Stuttgart",
+      "teamId": 9
+    },
+    {
+      "rank": 3,
+      "name": "RB Leipzig",
+      "teamId": 43
+    },
+    {
+      "rank": 2,
+      "name": "Bayer 04 Leverkusen",
+      "teamId": 7
+    },
+    {
+      "rank": 1,
+      "name": "FC Bayern München",
+      "teamId": 2
+    }
+  ],
+  "mittelfeld": [
+    {
+      "rank": 18,
+      "name": "KSV Holstein",
+      "teamId": 51
+    },
+    {
+      "rank": 17,
+      "name": "VfL Bochum",
+      "teamId": 24
+    },
+    {
+      "rank": 16,
+      "name": "FC Heidenheim",
+      "teamId": 50
+    },
+    {
+      "rank": 15,
+      "name": "TSG Hoffenheim",
+      "teamId": 14
+    },
+    {
+      "rank": 14,
+      "name": "SV Werder Bremen",
+      "teamId": 10
+    },
+    {
+      "rank": 13,
+      "name": "FC Union Berlin",
+      "teamId": 40
+    },
+    {
+      "rank": 12,
+      "name": "RB Leipzig",
+      "teamId": 43
+    },
+    {
+      "rank": 11,
+      "name": "FC StPauli",
+      "teamId": 39
+    },
+    {
+      "rank": 10,
+      "name": "Borussia Mönchengladbach",
+      "teamId": 15
+    },
+    {
+      "rank": 9,
+      "name": "FC Augsburg",
+      "teamId": 13
+    },
+    {
+      "rank": 8,
+      "name": "SC Freiburg",
+      "teamId": 5
+    },
+    {
+      "rank": 7,
+      "name": "VfL Wolfsburg",
+      "teamId": 11
+    },
+    {
+      "rank": 6,
+      "name": "Eintracht Frankfurt",
+      "teamId": 4
+    },
+    {
+      "rank": 5,
+      "name": "FSV Mainz 05",
+      "teamId": 18
+    },
+    {
+      "rank": 4,
+      "name": "VfB Stuttgart",
+      "teamId": 9
+    },
+    {
+      "rank": 3,
+      "name": "Borussia Dortmund",
+      "teamId": 3
+    },
+    {
+      "rank": 2,
+      "name": "Bayer 04 Leverkusen",
+      "teamId": 7
+    },
+    {
+      "rank": 1,
+      "name": "FC Bayern München",
+      "teamId": 2
+    }
+  ],
+  "sturm": [
+    {
+      "rank": 18,
+      "name": "KSV Holstein",
+      "teamId": 51
+    },
+    {
+      "rank": 17,
+      "name": "VfL Bochum",
+      "teamId": 24
+    },
+    {
+      "rank": 16,
+      "name": "FC Heidenheim",
+      "teamId": 50
+    },
+    {
+      "rank": 15,
+      "name": "TSG Hoffenheim",
+      "teamId": 14
+    },
+    {
+      "rank": 14,
+      "name": "FC Augsburg",
+      "teamId": 13
+    },
+    {
+      "rank": 13,
+      "name": "SC Freiburg",
+      "teamId": 5
+    },
+    {
+      "rank": 12,
+      "name": "VfL Wolfsburg",
+      "teamId": 11
+    },
+    {
+      "rank": 11,
+      "name": "SV Werder Bremen",
+      "teamId": 10
+    },
+    {
+      "rank": 10,
+      "name": "Borussia Mönchengladbach",
+      "teamId": 15
+    },
+    {
+      "rank": 9,
+      "name": "Borussia Dortmund",
+      "teamId": 3
+    },
+    {
+      "rank": 8,
+      "name": "Eintracht Frankfurt",
+      "teamId": 4
+    },
+    {
+      "rank": 7,
+      "name": "RB Leipzig",
+      "teamId": 43
+    },
+    {
+      "rank": 6,
+      "name": "FC StPauli",
+      "teamId": 39
+    },
+    {
+      "rank": 5,
+      "name": "FC Union Berlin",
+      "teamId": 40
+    },
+    {
+      "rank": 4,
+      "name": "FSV Mainz 05",
+      "teamId": 18
+    },
+    {
+      "rank": 3,
+      "name": "VfB Stuttgart",
+      "teamId": 9
+    },
+    {
+      "rank": 2,
+      "name": "Bayer 04 Leverkusen",
+      "teamId": 7
+    },
+    {
+      "rank": 1,
+      "name": "FC Bayern München",
+      "teamId": 2
+    }
+  ]
+}
