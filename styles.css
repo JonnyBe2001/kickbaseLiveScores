@@ -101,7 +101,7 @@ button:hover {
   color: #ffffff !important;
 }
 
-#btn {
+.btn {
   margin-top: 30px;
   border: none;
   color: #fb4404;
@@ -168,4 +168,8 @@ button:hover {
 
 .player-table tr {
   cursor: pointer;
+}
+
+.playerButtons {
+  margin-top: 15px;
 }

@@ -9,7 +9,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="/icons/favicon.png" type="image/png">
-    <script src="search.js"></script>
+    <script src="playerstats.js"></script>
+    <script src="refresh.js"></script>
 </head>
 <body style="background-color: #131314;">
     <div class="header-container">
@@ -21,11 +22,13 @@
             <i class="fa-solid fa-magnifying-glass" style="color: #fb4404;"></i>
         </a>
     </div>
-    <div>
-        <input id="search-input" type="text" placeholder="Spielersuche...">
+    <div class="container" id="playerPicture">
     </div>
-    <div class="container" id="mainContent">
-    </div>
-    <a class="btn" href="index.html">Mein Team</a>
+    <div class="container" id="playerName"></div>
+    <a id="playerStatsBtn" class="btn" href="player.html">Live</a>
+    <div class="container" id="totalPointsCont"></div>
+    <div class="container" id="pointsPerMinCont"></div>
+    <div class="container" id="mainContent" style="margin-bottom: 100px;">
+    </div>    
 </body>
 </html>
