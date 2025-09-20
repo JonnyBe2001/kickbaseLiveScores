@@ -35,9 +35,12 @@ async function login() {
         let loginToken = data.tkn;
         localStorage.setItem("token", loginToken);
         token = loginToken;
-
+        
         leagueId = data.srvl[0]?.id; //get first league
         localStorage.setItem("league", leagueId);
+        leagueName = data.srvl[0]?.name;
+        localStorage.setItem("leagueName", leagueName);
+
         league = leagueId;
 
         hideLoginForm();
@@ -50,6 +53,9 @@ async function login() {
 }
 
 async function myeleven() {
+    let currLeagueName = localStorage.getItem("leagueName");
+    let leagueBtnContent = `${currLeagueName} <i class="fa-solid fa-repeat"></i>`
+    document.getElementById("leagueBtn").innerHTML = leagueBtnContent;
     const url = `https://api.kickbase.com/v4/leagues/${league}/teamcenter/myeleven`;
     try {
         const response = await fetch(url, {
