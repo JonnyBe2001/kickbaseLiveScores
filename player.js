@@ -55,7 +55,14 @@ async function playerCenter() {
     const events = plCenterData.events;
     let playerPoints = plCenterData.p || 0;
 
-    document.getElementById("playerPicture").innerHTML = `<img src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png" alt="Player Picture" style="width: 100px; height: auto; vertical-align: middle;">`;
+    document.getElementById("playerPicture").innerHTML = `
+        <img
+            src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png"
+            alt="Player Picture"
+            onerror="this.onerror=null;this.src='icons/player_picture_placeholder.png';"
+            style="width: 100px; height: auto; vertical-align: middle; object-fit: contain;"
+        >
+    `;
     document.getElementById("playerName").innerHTML = `<strong>${plCenterData.n} ${playerPoints}</strong>`;
 
     let plCenterTable = `

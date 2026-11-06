@@ -26,7 +26,14 @@ async function playerCenter() {
     let minutesPlayed = secondsPlayed / 60;
     let pointsPerMin = totalPoints / minutesPlayed;
 
-    document.getElementById("playerPicture").innerHTML = `<img src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png" alt="Player Picture" style="width: 100px; height: auto; vertical-align: middle;">`;
+    document.getElementById("playerPicture").innerHTML = `
+        <img
+            src="https://kickbase.b-cdn.net/pool/playersbig/${playerId}.png"
+            alt="Player Picture"
+            onerror="this.onerror=null;this.src='icons/player_picture_placeholder.png';"
+            style="width: 100px; height: auto; vertical-align: middle; object-fit: contain;"
+        >
+    `;
     document.getElementById("playerName").innerHTML = `<strong>${plData.ln}</strong>`;
     document.getElementById("totalPointsCont").innerHTML=`<p><i class="fa-solid fa-square-poll-vertical"></i> ${totalPoints}</p>`;
     document.getElementById("pointsPerMinCont").innerHTML=`<p><i class="fa-regular fa-clock"></i> ${pointsPerMin.toFixed(2)}</p>`;
