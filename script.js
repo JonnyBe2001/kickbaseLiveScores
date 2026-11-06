@@ -17,9 +17,9 @@ async function login() {
     };
 
     try {
-        const response = await fetch('https://api.kickbase.com/v4/user/login', {
+        const response = await fetch('https://kickbase.jonas-bauer90.workers.dev/v4/user/login', {
             method: 'POST',
-            mode: 'cors', // CORS hinzufügen
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -32,15 +32,20 @@ async function login() {
         }
 
         const data = await response.json();
-        let loginToken = data.tkn;
+        const loginToken = data.tkn;
+        const firstLeague = data.lins?.[0];
+        const leagueId = firstLeague?.i ?? null;
+        const leagueName = firstLeague?.n ?? '';
+
         localStorage.setItem("token", loginToken);
-        token = loginToken;
-        
-        leagueId = data.srvl[0]?.id; //get first league
+        localStorage.setItem("kb_refresh_token", data.rtkn || '');
+        localStorage.setItem("kb_user_id", String(data.u?.id ?? ''));
+        localStorage.setItem("username", data.u?.name || '');
+        localStorage.setItem("leagues", JSON.stringify(data.lins || []));
         localStorage.setItem("league", leagueId);
-        leagueName = data.srvl[0]?.name;
         localStorage.setItem("leagueName", leagueName);
 
+        token = loginToken;
         league = leagueId;
 
         hideLoginForm();
@@ -56,7 +61,7 @@ async function myeleven() {
     let currLeagueName = localStorage.getItem("leagueName");
     let leagueBtnContent = `${currLeagueName} <i class="fa-solid fa-repeat"></i>`
     document.getElementById("leagueBtn").innerHTML = leagueBtnContent;
-    const url = `https://api.kickbase.com/v4/leagues/${league}/teamcenter/myeleven`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/leagues/${league}/teamcenter/myeleven`;
     try {
         const response = await fetch(url, {
             method: 'GET',

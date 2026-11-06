@@ -3,7 +3,7 @@ let league;
 let playerId;
 
 async function playerCenter() {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/${playerId}`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/players/${playerId}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
