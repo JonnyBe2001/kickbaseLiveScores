@@ -5,7 +5,7 @@ let currentMatchday;
 let totalPoints = 0;
 
 async function oponentsEleven() {
-    const url = `https://api.kickbase.com/v4/leagues/${league}/ranking?dayNumber=${currentMatchday}`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/leagues/${league}/ranking?dayNumber=${currentMatchday}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -29,7 +29,7 @@ async function oponentsEleven() {
                     <tbody>          
         `;
         for (const playerId of lineUp) {
-            const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
+            const url = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
             try {
                 const response = await fetch(url, {
                     method: 'GET',

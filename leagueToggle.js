@@ -1,5 +1,5 @@
 async function leagueToggle() {
-    const url = `https://api.kickbase.com/v4/leagues/selection`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/leagues/selection`;
     try {
         const response = await fetch(url, {
             method: 'GET',

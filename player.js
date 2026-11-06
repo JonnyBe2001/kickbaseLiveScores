@@ -5,7 +5,7 @@ let eventMap = new Map(); // Dynamische Map für Eventtypen
 
 // API-Call, um Eventtypen abzurufen
 async function fetchEventTypes() {
-    const url = `https://api.kickbase.com/v4/live/eventtypes`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/live/eventtypes`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -35,7 +35,7 @@ function getEventWord(eventId) {
 }
 
 async function playerCenter() {
-    const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

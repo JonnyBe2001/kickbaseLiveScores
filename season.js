@@ -4,7 +4,7 @@ let currentMatchday
 
 
 async function showLeaderboard () {
-    const url = `https://api.kickbase.com/v4/leagues/${league}/ranking?dayNumber=${currentMatchday}`;
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/leagues/${league}/ranking?dayNumber=${currentMatchday}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -50,7 +50,7 @@ async function showLeaderboard () {
 }
 
 async function getMatchday () {
-    const url = `https://api.kickbase.com/v4/competitions/1/players/8229?leagueId=${league}`; // 8229=Grabara - if he leaves change Id
+    const url = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/players/8229?leagueId=${league}`; // 8229=Grabara - if he leaves change Id
     const response = await fetch(url, {
         method: 'GET',
         headers: {

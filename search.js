@@ -3,7 +3,7 @@ let token;
 
 // API-Konfiguration
 const maxResults = 5;
-const apiUrl = `https://api.kickbase.com/v4/competitions/1/players/search`;
+const apiUrl = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/players/search`;
 
 let timeout;
 
@@ -96,7 +96,7 @@ async function displayPlayers(playersArray) {
 
     // Gehe durch jedes Element im playersArray
     for (const playerId of playersArray) {
-        const url = `https://api.kickbase.com/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
+        const url = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/playercenter/${playerId}?leagueId=${league}`;
 
         try {
             const response = await fetch(url, {
