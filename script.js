@@ -76,6 +76,15 @@ async function myeleven() {
         }
         const myelevenData = await response.json(); // Teamcenter Data
 
+        const totalPoints = myelevenData.lp.slice(0, 11).reduce((total, player) => {
+            if (!player) {
+                return total;
+            }
+
+            const points = player.p === undefined ? 0 : Number(player.p);
+            return Number.isFinite(points) ? total + points : total;
+        }, 0);
+
         let pointsHTML = `
                 <table class="custom-table">
                     <thead>
@@ -83,7 +92,7 @@ async function myeleven() {
                             <th class="custom-cell" style="text-align: left; padding-right: 20px;">Team</th>
                             <th></th>
                             <th></th>
-                            <th class="custom-cell">${myelevenData.p}</th>
+                            <th class="custom-cell">${totalPoints}</th>
                         </tr>
                     </thead>
                     <tbody>
