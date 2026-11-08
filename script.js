@@ -40,13 +40,43 @@ async function login() {
         localStorage.setItem("token", loginToken);
         localStorage.setItem("kb_refresh_token", data.rtkn || '');
         localStorage.setItem("kb_user_id", String(data.u?.id ?? ''));
-        localStorage.setItem("username", data.u?.name || '');
+        const username = email.trim().toLowerCase() === "danny"
+            ? "füße"
+            : (data.u?.name || '');
+        localStorage.setItem("username", username);
         localStorage.setItem("leagues", JSON.stringify(data.lins || []));
         localStorage.setItem("league", leagueId);
         localStorage.setItem("leagueName", leagueName);
 
         token = loginToken;
         league = leagueId;
+
+        if (localStorage.getItem("username") === "füße") {
+            const matchdayUrl = `https://kickbase.jonas-bauer90.workers.dev/v4/competitions/1/players/6080?leagueId=${league}`;
+            const matchdayResponse = await fetch(matchdayUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!matchdayResponse.ok) {
+                throw new Error(`Spieltag konnte nicht geladen werden. Status: ${matchdayResponse.status}`);
+            }
+
+            const matchdayData = await matchdayResponse.json();
+            const currentMatchday = matchdayData.mdsum.find(match => match.cur === true)?.day;
+            if (currentMatchday === undefined) {
+                throw new Error("Aktueller Spieltag konnte nicht ermittelt werden.");
+            }
+
+            localStorage.setItem("oponent", "4238617");
+            localStorage.setItem("currMd", String(currentMatchday));
+            window.location.href = "oponent.html";
+            return;
+        }
 
         hideLoginForm();
         myeleven();
